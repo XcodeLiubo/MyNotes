@@ -1,1 +1,0 @@
-![](infoplist.png)
