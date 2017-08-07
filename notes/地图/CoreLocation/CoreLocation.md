@@ -41,13 +41,13 @@
 		self->_mgr = [[CLLocationManager alloc] init];
 		```
 * 设置定位属性
-	```
-	// 每隔100米定位一次
-    self.mgr.distanceFilter = 100 ;
+```
+// 每隔100米定位一次
+self.mgr.distanceFilter = 100 ;
     
-    // 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
-    self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
-	```
+// 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
+self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
+```
 * 绑定代理(遵守协议)
 	```
 	// 绑定代理, 能接收数据
@@ -95,26 +95,26 @@
 </br></br>
 * 设置定位属性
 	
-	```objc
-	// 每隔100米定位一次
-    	self.mgr.distanceFilter = 100 ;
+```objc
+// 每隔100米定位一次
+self.mgr.distanceFilter = 100 ;
     
-    	// 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
-    	self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
-	```
+// 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
+self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
+```
 </br></br>
 * 但是 iOS8 之后, 苹果继续加强了用户的隐私保护, 程序员必须自己用 代码提示用户授权, 所以iOS8 之后提供了两个方法
 	- \- (void)requestWhenInUseAuthorization
 		
-		```objc
-			//这个方法是程序员手动请求用户授权的
-			[self.mgr requestWhenInUseAuthorization];
+```objc
+//这个方法是程序员手动请求用户授权的
+[self.mgr requestWhenInUseAuthorization];
 			
-		```
+```
 		###### ps:只能在前台定位, 不能在后台定位, 如果要启用后台定位的话要打开后台模式,但是这种情况下,后台定位时,在屏幕的上状态栏会出现蓝色的 提示框, 提示用户当前正在后台定位
 		![](2.png)
 	</br>
-	- \- (void)requestAlwaysAuthorization
+	- - (void)requestAlwaysAuthorization
 		
 		```objc
 		[self.mgr requestWhenInUseAuthorization];
