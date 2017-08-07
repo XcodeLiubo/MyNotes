@@ -11,11 +11,11 @@
 
 
 ### 地图的类型 (通过设置MKMapView的mapType 可以设置地图类型)
-*          MKMapTypeStanded   普通地图
-*        MKMapTypeSatellite	卫星地图
-*           MKMapTypeHybird	混合模式
-* MKMapTypeSatelliteFlyover	3D立体卫星(**iOS 9.0**)
-* MKMapTypeHybirdFlyover		3D立体混合(**iOS 9.0**)
+* MKMapTypeStanded   普通地图
+* MKMapTypeSatellite	卫星地图
+* MKMapTypeHybird	混合模式
+* MKMapTypeSatelliteFlyover 3D立体卫星(**iOS 9.0**)
+* MKMapTypeHybirdFlyover 3D立体混合(**iOS 9.0**)
 
 
 ## 属性
