@@ -27,7 +27,7 @@
 
 
 
-# iOS定位分类
+## iOS定位分类
 ### iOS8之前的定位
 * 导入框架,导入头文件(Xcode6 之后不用手动导入)
 	- \<CoreLocation/CoreLocation.h\>
@@ -37,39 +37,35 @@
 
 * 创建全局的位置管理者
 	- 位置管理者一定要是全局的
-		
 		```
 		self->_mgr = [[CLLocationManager alloc] init];
 		```
 * 设置定位属性
-	
-	```
-	// 每隔100米定位一次
-    self.mgr.distanceFilter = 100 ;
+```
+// 每隔100米定位一次
+self.mgr.distanceFilter = 100 ;
     
-    // 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
-    self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
-	```
+// 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
+self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
+```
 * 绑定代理(遵守协议)
-	
 	```
 	// 绑定代理, 能接收数据
-    _mgr.delegate = self;
+    	_mgr.delegate = self;
 	```
 * 开启定位
-	
 	```
 	[_mgr startUpdatingLocation];
 	```
+
 * 监听回调
 	
-	```
-	/** 定位后会不断调用, 所以直接停掉, 当然开发中必须每隔多远再次定位, 所以要设置 mgr的属性 */
+```
+/** 定位后会不断调用, 所以直接停掉, 当然开发中必须每隔多远再次定位, 所以要设置 mgr的属性 */
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
     NSLog(@"%@",locations);
 }
-	
-	```
+```
 * 如果要支持后台定位, 则要 打开后台模式
 	- 在info.plist中配置
 		![](2.png)
@@ -94,31 +90,31 @@
 	
 	```objc
 	// 绑定代理, 能接收数据
-    _mgr.delegate = self;
+    	_mgr.delegate = self;
 	```
 </br></br>
 * 设置定位属性
 	
-	```objc
-	// 每隔100米定位一次
-    self.mgr.distanceFilter = 100 ;
+```objc
+// 每隔100米定位一次
+self.mgr.distanceFilter = 100 ;
     
-    // 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
-    self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
-	```
+// 定位精确度 (精确度越高, 越耗电 这里我给出的是 千米)
+self.mgr.desiredAccuracy = kCLLocationAccuracyKilometer;
+```
 </br></br>
 * 但是 iOS8 之后, 苹果继续加强了用户的隐私保护, 程序员必须自己用 代码提示用户授权, 所以iOS8 之后提供了两个方法
 	- \- (void)requestWhenInUseAuthorization
 		
-		```objc
-			//这个方法是程序员手动请求用户授权的
-			[self.mgr requestWhenInUseAuthorization];
+```objc
+//这个方法是程序员手动请求用户授权的
+[self.mgr requestWhenInUseAuthorization];
 			
-		```
+```
 		###### ps:只能在前台定位, 不能在后台定位, 如果要启用后台定位的话要打开后台模式,但是这种情况下,后台定位时,在屏幕的上状态栏会出现蓝色的 提示框, 提示用户当前正在后台定位
 		![](2.png)
 	</br>
-	- \- (void)requestAlwaysAuthorization
+	- - (void)requestAlwaysAuthorization
 		
 		```objc
 		[self.mgr requestWhenInUseAuthorization];
@@ -137,24 +133,24 @@
 	
 	```objc
 	/** 定位后会不断调用, 所以直接停掉, 当然开发中必须每隔多远再次定位, 所以要设置 mgr的属性 */
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
-    NSLog(@"%@",locations);
-}
+	- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    	NSLog(@"%@",locations);
+	}
 	
 	```
 	
 	```objc
 	/** 用户授权状态 */
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
-    switch (status) {
-        case kCLAuthorizationStatusDenied:
-        {
-            if([CLLocationManager locationServicesEnabled]){
-                NSLog(@"被拒");
-            }else{
-                NSLog(@"定位没打开");
-            }
-        }
+	- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status{
+    	switch (status) {
+        	case kCLAuthorizationStatusDenied:
+        	{
+            		if([CLLocationManager locationServicesEnabled]){
+                	NSLog(@"被拒");
+            	}else{
+                	NSLog(@"定位没打开");
+            	}
+        	}
             break;
         case kCLAuthorizationStatusNotDetermined:
             NSLog(@"状态没有被决定");;
@@ -280,14 +276,3 @@ if([CLLocationManager locationServicesEnabled] &&
 
 ```
 
-
-
-
-
-
-
-
-
-
-
-</br></br></br></br></br></br></br></br></br></br></br></br></br></br></br>

@@ -11,11 +11,11 @@
 
 
 ### 地图的类型 (通过设置MKMapView的mapType 可以设置地图类型)
-*          MKMapTypeStanded   普通地图
-*        MKMapTypeSatellite	卫星地图
-*           MKMapTypeHybird	混合模式
-* MKMapTypeSatelliteFlyover	3D立体卫星(**iOS 9.0**)
-* MKMapTypeHybirdFlyover		3D立体混合(**iOS 9.0**)
+* MKMapTypeStanded   普通地图
+* MKMapTypeSatellite	卫星地图
+* MKMapTypeHybird	混合模式
+* MKMapTypeSatelliteFlyover 3D立体卫星(**iOS 9.0**)
+* MKMapTypeHybirdFlyover 3D立体混合(**iOS 9.0**)
 
 
 ## 属性
@@ -128,7 +128,9 @@ self.mapView.mapType = MKMapTypeStandard;
 </br>
 </br>
 </br>
+
 ## MapKit高级用法
+### 代码
 ```objc
 - (CLLocationManager *)mgr{
     if (!_mgr){
@@ -319,8 +321,10 @@ self.mapView.mapType = MKMapTypeStandard;
 
 </br>
 </br>
-</br>
+
 ## 系统的导航
+### 代码
+
 ```objc
 @interface ViewController ()
 /** 地理编码*/
@@ -376,7 +380,8 @@ self.mapView.mapType = MKMapTypeStandard;
 
 </br>
 </br>
-</br>
+
+
 ## 3D视角/地图截图
 ### 3D视角
 ```objc
@@ -422,6 +427,7 @@ self.mapView.mapType = MKMapTypeStandard;
 </br>
 
 ## 手绘路线
+### 代码
 ```objc
 
 #import "ViewController.h"
