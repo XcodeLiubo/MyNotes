@@ -2,11 +2,11 @@
 {\fonttbl\f0\fnil\fcharset134 PingFangSC-Regular;\f1\fnil\fcharset0 Menlo-Regular;}
 {\colortbl;\red255\green255\blue255;\red255\green255\blue255;\red128\green128\blue128;\red217\green11\blue0;
 \red255\green102\blue102;\red102\green0\blue141;\red254\green73\blue64;\red131\green192\blue87;\red246\green164\blue245;
-\red0\green128\blue128;\red219\green44\blue56;}
+\red0\green128\blue128;\red219\green44\blue56;\red198\green124\blue72;\red0\green255\blue0;}
 {\*\expandedcolortbl;;\csgenericrgb\c100000\c100000\c100000;\csgenericrgb\c50196\c50196\c50196;\csgenericrgb\c85098\c4314\c0;
 \csgenericrgb\c100000\c40000\c40000;\csgenericrgb\c40000\c0\c55294;\csgenericrgb\c99608\c28627\c25098;\csgenericrgb\c51200\c75400\c34300;\csgenericrgb\c96350\c64436\c96197;
-\csgenericrgb\c0\c50196\c50196;\csgenericrgb\c85900\c17100\c21900;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\csgenericrgb\c0\c50196\c50196;\csgenericrgb\c85900\c17100\c21900;\csgenericrgb\c77800\c48800\c28400;\csgenericrgb\c0\c100000\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww22500\viewh8360\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
 \f0\fs38 \cf0 \cb2 \'b1\'c8\'bd\'cf\'d6\'d8\'d2\'aa\'b5\'c4 \'c0\'e0\
@@ -164,6 +164,7 @@ show msg in window msg = @\'a1\'b0\'cd\'f8\'c2\'e7\'d1\'d3\'ca\'b1,\'c7\'eb\'d6\
 \
 \
 \
+\pard\tx890\pardeftab890\pardirnatural\partightenfactor0
 \cf7 Microfund 
 \f0 \'ce\'a2\'bb\'f9\'bd\'f0
 \f1  
@@ -233,10 +234,10 @@ show msg in window msg = @\'a1\'b0\'cd\'f8\'c2\'e7\'d1\'d3\'ca\'b1,\'c7\'eb\'d6\
 
 \f1 \cf5 \
 \
-
-\f0 \'ca\'b1\'bc\'e4\'b5\'c4\'ba\'cb\'b6\'d4
-\f1 \
 \pard\tx989\pardeftab989\pardirnatural\partightenfactor0
+
+\f0 \cf5 \'ca\'b1\'bc\'e4\'b5\'c4\'ba\'cb\'b6\'d4
+\f1 \
 
 \fs40 \cf3 + (\cf9 NSString\cf3  *)timeStamp\
 \
@@ -244,5 +245,65 @@ show msg in window msg = @\'a1\'b0\'cd\'f8\'c2\'e7\'d1\'d3\'ca\'b1,\'c7\'eb\'d6\
 \pard\tx989\pardeftab989\pardirnatural\partightenfactor0
 
 \fs36 \cf5 \
+\pard\tx989\pardeftab989\pardirnatural\partightenfactor0
 
-\f0 \'b0\'d1\'d7\'d6\'b7\'fb\'b4\'ae( 16\'bd\'f8\'d6\'c6)\'d7\'aa\'bb\'bb\'b3\'c9 \'b5\'c4\'d1\'d5\'c9\'ab}
+\f0 \cf5 \'b0\'d1\'d7\'d6\'b7\'fb\'b4\'ae( 16\'bd\'f8\'d6\'c6)\'d7\'aa\'bb\'bb\'b3\'c9 \'b5\'c4\'d1\'d5\'c9\'ab\
+\
+\
+\
+\
+\
+\'d3\'c3\'bb\'a7\'b5\'c4 token\
+\'d3\'c3\'bb\'a7\'ce\'a8\'d2\'bb\'b1\'ea\'ca\'b6\'b5\'c4 token   \'d3\'c3\'b5\'c4\'b1\'c8\'bd\'cf\'b6\'e0, \'ba\'dc\'b6\'e0\'b5\'d8\'b7\'bd\'c5\'d0\'b6\'cf\'d3\'c3\'bb\'a7\'b5\'c7\'c2\'bc\'b9\'fd\'c3\'bb\'d3\'d0 \'be\'cd\'ca\'c7   
+\f1\fs40 \cf12 userObjectLoginToken 
+\f0 \'ca\'c7\'b7\'f1\'ce\'aa nil
+\fs36 \cf5 \
+\pard\tx989\pardeftab989\pardirnatural\partightenfactor0
+
+\f1\fs40 \cf12 #define userRRJJToken @\cf11 "rrjjUserSignOneToken"
+\fs32 \cf13 //
+\f0 \'d3\'c3\'bb\'a7\'ce\'a8\'d2\'bb\'b1\'ea\'ca\'be
+\f1\fs40 \cf3 \
+\cf12 #define userObjectLoginToken [[NSUserDefaults standardUserDefaults]objectForKey:userRRJJToken]
+\fs32 \cf13 //
+\f0 \'c8\'a1\'b3\'f6\'d3\'c3\'bb\'a7\'b1\'ed\'ca\'be\
+\
+\
+\'d3\'c3\'bb\'a7\'c1\'d9\'ca\'b1\'b5\'c4token \'d3\'c3\'d3\'da\'cd\'bc\'c6\'ac\'b5\'c4\'d1\'e9\'d6\'a4\'c2\'eb \
+
+\f1\fs40 \cf12 #define userRRJJTmpToken @\cf11 "rrjjuserRRJJtmpToken"
+\fs32 \cf13 //
+\f0 \'c1\'d9\'ca\'b1
+\f1 token 
+\f0 \'d3\'c3\'d3\'da\'cd\'bc\'c6\'ac\'d1\'e9\'d6\'a4\'c2\'eb
+\f1\fs40 \cf3 \
+\cf12 #define userObjectRRJJTmpToken [[NSUserDefaults standardUserDefaults]objectForKey:userRRJJTmpToken]
+\fs32 \cf13 //
+\f0 \'c8\'a1\'b3\'f6\'c1\'d9\'ca\'b1
+\f1 token\
+\pard\tx989\pardeftab989\pardirnatural\partightenfactor0
+
+\f0 \cf13 \
+
+\fs46 PS: \'d2\'bb\'b0\'e3\'d4\'da  \'b7\'fe\'ce\'f1\'c6\'f7\'b7\'b5\'bb\'d8\'b5\'c4 msg == @\'a1\'b0
+\fs54 \cf11 \'c7\'eb\'d6\'d8\'d0\'c2\'b5\'c7\'c2\'bc
+\f1 ~
+\f0\fs46 \cf13 \'a1\'b1  \'b5\'c4\'ca\'b1\'ba\'f2\'c9\'be\'b3\'fd\'b5\'f4 \'d5\'e2\'c1\'bd\'b8\'f6 token\
+\
+\
+\
+\'d3\'c3\'bb\'a7\'d7\'ca\'bd\'f0\'bf\'c9\'bc\'fb \'be\'cd\'c4\'dc\'c8\'a1\'b5\'bd\'d6\'b5, \'b2\'bb\'bf\'c9\'bc\'fb\'be\'cd\'c8\'a1\'b2\'bb\'b5\'bd\'d6\'b5  \'d4\'da \'d7\'ca\'b2\'fa\'d7\'dc\'c0\'c0  \'b7\'b5\'bb\'d8\'b5\'da1\'d7\'e9\'b5\'c4\'cd\'b7\'b2\'bf\'d3\'c3\'b5\'bd\
+\pard\tx989\pardeftab989\pardirnatural\partightenfactor0
+
+\f1\fs40 \cf12 #define USEREYESSEE @\cf11 "rrjjUserEyes"
+\fs32 \cf13 //
+\f0 \'d3\'c3\'bb\'a7\'d7\'ca\'bd\'f0\'bf\'c9\'bf\'b4\'bc\'fb
+\f1\fs40 \cf3 \
+\cf12 #define USEREYESSEEUP [[NSUserDefaults standardUserDefaults]objectForKey:USEREYESSEE]
+\fs32 \cf13 //
+\f0 \'c8\'a1\'b3\'f6\'d3\'c3\'bb\'a7\'d7\'ca\'bd\'f0\'bf\'c9\'bf\'b4\'bc\'fb
+\fs46 \
+\pard\tx989\pardeftab989\pardirnatural\partightenfactor0
+
+\fs32 \cf13 \
+}
