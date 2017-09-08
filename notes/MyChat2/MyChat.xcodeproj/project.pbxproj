@@ -13,7 +13,6 @@
 		3AE9C3351F62CE4600F59976 /* MyChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C3341F62CE4600F59976 /* MyChatTests.m */; };
 		3AE9C3401F62CE4600F59976 /* MyChatUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C33F1F62CE4600F59976 /* MyChatUITests.m */; };
 		3AE9C3531F62CEFE00F59976 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C34F1F62CEFE00F59976 /* AppDelegate.m */; };
-		3AE9C3551F62CEFE00F59976 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C3521F62CEFE00F59976 /* main.m */; };
 		3AE9C35B1F62D00300F59976 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AE9C35A1F62D00300F59976 /* Info.plist */; };
 		3AE9C3621F62D04300F59976 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C3601F62D04300F59976 /* main.m */; };
 		A2BEE22923498422DECF1781 /* libPods-MyChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA66F1BAC0643565441D01D9 /* libPods-MyChat.a */; };
@@ -51,8 +50,6 @@
 		3AE9C3411F62CE4600F59976 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AE9C34E1F62CEFE00F59976 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3AE9C34F1F62CEFE00F59976 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		3AE9C3521F62CEFE00F59976 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3AE9C3571F62CF7D00F59976 /* LBChat.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChat.pch; sourceTree = "<group>"; };
 		3AE9C35A1F62D00300F59976 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AE9C35F1F62D04300F59976 /* LBChat.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChat.pch; sourceTree = "<group>"; };
 		3AE9C3601F62D04300F59976 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -146,7 +143,6 @@
 			isa = PBXGroup;
 			children = (
 				3AE9C34D1F62CEFE00F59976 /* default */,
-				3AE9C3501F62CEFE00F59976 /* system */,
 				3AE9C31A1F62CE4600F59976 /* Supporting Files */,
 			);
 			path = MyChat;
@@ -187,15 +183,6 @@
 				3AE9C34F1F62CEFE00F59976 /* AppDelegate.m */,
 			);
 			path = default;
-			sourceTree = "<group>";
-		};
-		3AE9C3501F62CEFE00F59976 /* system */ = {
-			isa = PBXGroup;
-			children = (
-				3AE9C3571F62CF7D00F59976 /* LBChat.pch */,
-				3AE9C3521F62CEFE00F59976 /* main.m */,
-			);
-			path = system;
 			sourceTree = "<group>";
 		};
 		3AE9C35C1F62D04300F59976 /* Category */ = {
@@ -515,7 +502,6 @@
 			files = (
 				3AE9C3531F62CEFE00F59976 /* AppDelegate.m in Sources */,
 				3AE9C3621F62D04300F59976 /* main.m in Sources */,
-				3AE9C3551F62CEFE00F59976 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -658,7 +644,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ETYS29C2N4;
-				GCC_PREFIX_HEADER = "/Users/liubo/Desktop/GitHub/笔记/MyNotes/notes/MyChat/MyChat/system/LBChat.pch";
+				GCC_PREFIX_HEADER = "/Users/liubo/Desktop/GitHub/笔记/MyNotes/notes/MyChat2/MyChat/system/LBChat.pch";
 				INFOPLIST_FILE = MyChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -673,7 +659,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ETYS29C2N4;
-				GCC_PREFIX_HEADER = "/Users/liubo/Desktop/GitHub/笔记/MyNotes/notes/MyChat/MyChat/system/LBChat.pch";
+				GCC_PREFIX_HEADER = "/Users/liubo/Desktop/GitHub/笔记/MyNotes/notes/MyChat2/MyChat/system/LBChat.pch";
 				INFOPLIST_FILE = MyChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
