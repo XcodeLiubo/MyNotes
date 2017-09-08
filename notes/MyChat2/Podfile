@@ -6,7 +6,9 @@ target 'MyChat' do
   # use_frameworks!
 
   # Pods for MyChat
-
+  pod 'Masonry'
+  pod 'MJRefresh'
+  pod 'MJExtension'
   target 'MyChatTests' do
     inherit! :search_paths
     # Pods for testing

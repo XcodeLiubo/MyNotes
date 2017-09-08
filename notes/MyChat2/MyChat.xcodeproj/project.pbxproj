@@ -15,6 +15,9 @@
 		3AE9C3531F62CEFE00F59976 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C34F1F62CEFE00F59976 /* AppDelegate.m */; };
 		3AE9C35B1F62D00300F59976 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AE9C35A1F62D00300F59976 /* Info.plist */; };
 		3AE9C3621F62D04300F59976 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C3601F62D04300F59976 /* main.m */; };
+		3AE9C36B1F62D5F900F59976 /* UIView+LBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C36A1F62D5F900F59976 /* UIView+LBView.m */; };
+		3AE9C36E1F62D60500F59976 /* UIControl+LBControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C36D1F62D60500F59976 /* UIControl+LBControl.m */; };
+		3AE9C3711F62F80100F59976 /* LBChatVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C3701F62F80100F59976 /* LBChatVC.m */; };
 		A2BEE22923498422DECF1781 /* libPods-MyChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA66F1BAC0643565441D01D9 /* libPods-MyChat.a */; };
 		D3AA701E362F7FAB43F00D9C /* libPods-MyChatUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A6002D3AD424A144000A023 /* libPods-MyChatUITests.a */; };
 /* End PBXBuildFile section */
@@ -53,6 +56,12 @@
 		3AE9C35A1F62D00300F59976 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3AE9C35F1F62D04300F59976 /* LBChat.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChat.pch; sourceTree = "<group>"; };
 		3AE9C3601F62D04300F59976 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3AE9C3691F62D5F900F59976 /* UIView+LBView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LBView.h"; sourceTree = "<group>"; };
+		3AE9C36A1F62D5F900F59976 /* UIView+LBView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LBView.m"; sourceTree = "<group>"; };
+		3AE9C36C1F62D60500F59976 /* UIControl+LBControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+LBControl.h"; sourceTree = "<group>"; };
+		3AE9C36D1F62D60500F59976 /* UIControl+LBControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIControl+LBControl.m"; sourceTree = "<group>"; };
+		3AE9C36F1F62F80100F59976 /* LBChatVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChatVC.h; sourceTree = "<group>"; };
+		3AE9C3701F62F80100F59976 /* LBChatVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatVC.m; sourceTree = "<group>"; };
 		4A6002D3AD424A144000A023 /* libPods-MyChatUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyChatUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E5ECA6E7956F66AE1AEEC13 /* Pods-MyChatTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChatTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyChatTests/Pods-MyChatTests.release.xcconfig"; sourceTree = "<group>"; };
 		96F44279913B729E26F859ED /* Pods-MyChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChat.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyChat/Pods-MyChat.debug.xcconfig"; sourceTree = "<group>"; };
@@ -188,6 +197,10 @@
 		3AE9C35C1F62D04300F59976 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				3AE9C3691F62D5F900F59976 /* UIView+LBView.h */,
+				3AE9C36A1F62D5F900F59976 /* UIView+LBView.m */,
+				3AE9C36C1F62D60500F59976 /* UIControl+LBControl.h */,
+				3AE9C36D1F62D60500F59976 /* UIControl+LBControl.m */,
 			);
 			name = Category;
 			path = MyChat/Category;
@@ -214,6 +227,8 @@
 		3AE9C3611F62D04300F59976 /* VC */ = {
 			isa = PBXGroup;
 			children = (
+				3AE9C36F1F62F80100F59976 /* LBChatVC.h */,
+				3AE9C3701F62F80100F59976 /* LBChatVC.m */,
 			);
 			name = VC;
 			path = MyChat/VC;
@@ -290,6 +305,7 @@
 		3AE9C30F1F62CE4600F59976 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = LB;
 				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = LiuBo;
 				TargetAttributes = {
@@ -500,6 +516,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AE9C3711F62F80100F59976 /* LBChatVC.m in Sources */,
+				3AE9C36B1F62D5F900F59976 /* UIView+LBView.m in Sources */,
+				3AE9C36E1F62D60500F59976 /* UIControl+LBControl.m in Sources */,
 				3AE9C3531F62CEFE00F59976 /* AppDelegate.m in Sources */,
 				3AE9C3621F62D04300F59976 /* main.m in Sources */,
 			);

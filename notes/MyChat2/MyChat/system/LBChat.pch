@@ -14,6 +14,23 @@
 
 
 #ifdef  __OBJC__
+#import "UIView+LBView.h"
+
+
+
+/*        ****************** 尺寸 *******************/
+#define SCREEN_bounds UIScreen.mainScreen.bounds
+#define SCREEN_W    UIScreen.mainScreen.bounds.size.width
+#define SCREEN_H    UIScreen.mainScreen.bounds.size.height
+
+
+
+/*        ****************** 转换 *******************/
+/** 必须传 C, 并且不能是变量*/
+#define QUICKLY_TO_STRING(__VA_ARGS__) @(#__VA_ARGS__)
+
+
+
 
 #endif
 
