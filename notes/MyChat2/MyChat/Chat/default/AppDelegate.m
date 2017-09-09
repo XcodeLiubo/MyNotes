@@ -20,10 +20,12 @@
     
     self.window = [UIWindow createView:^(UIWindow *view) {
         view.opaque = NO;
-        view.init_frame(SCREEN_bounds).init_bgColor([UIColor redColor]).init_identify(@"keywindow");
+        view.init_frame(SCREEN_bounds).init_bgColor([UIColor whiteColor]).init_identify(@"keywindow");
         
         LBChatVC *chatVC = [[LBChatVC alloc] init];
-        view.rootViewController = chatVC;
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:chatVC];
+        
+        view.rootViewController = nav;
         [view makeKeyAndVisible];
     }];
     

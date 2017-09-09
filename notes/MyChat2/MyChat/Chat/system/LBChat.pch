@@ -15,7 +15,7 @@
 
 #ifdef  __OBJC__
 #import "UIView+LBView.h"
-
+#import "GlobalConstVar.h"
 
 
 /*        ****************** 尺寸 *******************/

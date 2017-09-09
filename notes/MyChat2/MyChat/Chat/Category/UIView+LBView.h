@@ -78,4 +78,11 @@
 - (__kindof UIView * (^)(UIColor    *value))   init_bgColor          init_背景颜色
 
 - (__kindof UIView * (^)(NSString   *value))  init_identify          init_标识
+
+/** 根据标识找到控件控件*/
++ (__kindof UIView *)viewWithIdentify:(NSString * const)identify;
+
+
+/** 快速创建一个圆角的view*/
++ (instancetype)roundViewWithRadius:(CGFloat)radius bgColor:(UIColor *)bgColor rect:(CGRect)rect;
 @end

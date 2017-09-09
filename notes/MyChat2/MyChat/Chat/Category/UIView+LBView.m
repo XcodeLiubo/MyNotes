@@ -84,7 +84,7 @@ BasicProperty
 static const void *objc_view_new_instance_identifyID = &objc_view_new_instance_identifyID;
 
 - (NSString *)identifyID{
-    return [dic objectForKey:objc_getAssociatedObject(self, objc_view_new_instance_identifyID)];
+    return [[dic objectForKey:objc_getAssociatedObject(self, objc_view_new_instance_identifyID)] lastObject];
 }
 
 
@@ -172,10 +172,13 @@ static NSMutableDictionary *dic;
 - (__kindof UIView * (^)(NSString *value))init_identify{
     __weak typeof(self) weak_self = self;
     UIView *(^block)(NSString *value) = ^(NSString *value){
-        [dic setObject:weak_self forKey:@"instance"];
+        if(self.identifyID)return weak_self;
+        
         NSString *hashStr = [NSString stringWithFormat:@"%zd",self.hash];
-        [dic setObject:value forKey:hashStr];
+        [dic setObject:@[weak_self,value] forKey:hashStr];
+        
         objc_setAssociatedObject(self, objc_view_new_instance_identifyID, hashStr, OBJC_ASSOCIATION_COPY_NONATOMIC);
+        
         return weak_self;
     };
     return block;
@@ -204,9 +207,50 @@ static NSMutableDictionary *dic;
    
 }
 
++ (__kindof UIView *)viewWithIdentify:(NSString * const)identify{
+    return [[dic objectForKey:objc_getAssociatedObject(self, objc_view_new_instance_identifyID)] firstObject];
+}
+
+
 #pragma mark *************** system
 + (void)load{
     dic = [NSMutableDictionary dictionary];
+}
+
+
+
+#pragma mark *************** public method(有的是辅助)
++ (instancetype)roundViewWithRadius:(CGFloat)radius bgColor:(UIColor *)bgColor rect:(CGRect)rect{
+    UIView *view = [[self alloc] initWithFrame:rect];
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGMutablePathRef path = [view creatRoundedRectForRect:rect radius:radius];
+    
+    CGContextSetFillColorWithColor(context, bgColor.CGColor);
+    CGContextAddPath(context, path);
+    CGContextFillPath(context);
+    
+    return view;
+}
+
+- (CGMutablePathRef)creatRoundedRectForRect:(CGRect)rect radius:(CGFloat)radius {
+    //申请路径
+    CGMutablePathRef path = CGPathCreateMutable();
+    
+    //将起始点移动到点0
+    CGPathMoveToPoint(path, NULL, CGRectGetMidX(rect), CGRectGetMinY(rect));
+    //绘制曲线1
+    CGPathAddArcToPoint(path, NULL, CGRectGetMaxX(rect), CGRectGetMinY(rect), CGRectGetMaxX(rect), CGRectGetMaxY(rect), radius);
+    //绘制曲线2
+    CGPathAddArcToPoint(path, NULL, CGRectGetMaxX(rect), CGRectGetMaxY(rect), CGRectGetMinX(rect), CGRectGetMaxY(rect), radius);
+    //绘制曲线3
+    CGPathAddArcToPoint(path, NULL, CGRectGetMinX(rect), CGRectGetMaxY(rect), CGRectGetMinX(rect), CGRectGetMinY(rect), radius);
+    //绘制曲线4
+    CGPathAddArcToPoint(path, NULL, CGRectGetMinX(rect), CGRectGetMinY(rect), CGRectGetMaxX(rect), CGRectGetMinY(rect), radius);
+    //闭合path，绘制直线5
+    CGPathCloseSubpath(path);
+    
+    return path;
 }
 
 
