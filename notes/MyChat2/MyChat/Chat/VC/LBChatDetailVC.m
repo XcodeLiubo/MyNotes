@@ -14,6 +14,8 @@
 #import "LBChatDetailVC.h"
 #import "LBChatDetailCell.h"
 #import "LBChatDetailManager.h"
+#import "LBChatDetailCellModel.h"
+#import "NSObject+LBModelQuicklyCreate.h"
 
 
 #define mine [LBChatDetailManager shareChatDetailVCMGR]
@@ -21,30 +23,33 @@
 
 @interface LBChatDetailVC ()<UITableViewDelegate, UITableViewDataSource>
 /** dataSource*/
-@property(nonatomic,strong) NSMutableArray *dataSource;
+@property(nonatomic,strong) NSMutableArray<LBChatDetailCellModel *> *dataSource;
 
 /** table*/
 @property(nonatomic,weak) UITableView *tableView;
 @end
 
 @implementation LBChatDetailVC
-static LBChatDetailVC *_chatVC;
-
-
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    self.navigationController.toolbarHidden = YES;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUPUI];
     
     //请求数据
-    //[self request];
+    [self request];
     
 }
 
+
+#pragma mark *************** UI
 - (void)setUPUI{
     self.navigationController.navigationBar.translucent = NO;
     self.navigationItem.title = self.chatType;
-    
+    self.navigationController.toolbarHidden = NO;
     //创建表格
     [self createTable];
     
@@ -60,10 +65,29 @@ static LBChatDetailVC *_chatVC;
 - (void)createKeyBoard{
     //创建自定义的键盘
 }
+
+
+
+#pragma mark *************** 请求数据
+- (void)request{
+    //先从本地数据库度
+    
+    
+    //请求  这里是模拟
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"history.plist" ofType:nil];
+    NSArray *chatListArr = [NSArray arrayWithContentsOfFile:path];
+    for (NSDictionary *dic in chatListArr) {
+        LBChatDetailCellModel *model = [LBChatDetailCellModel modelWithDic:dic];
+        [self.dataSource addObject:model];
+    }
+    assert(1);
+}
+
+
 #pragma mark *************** 数据源
-- (NSMutableArray *)dataSource{
+- (NSMutableArray<LBChatDetailCellModel *> *)dataSource{
     if (!_dataSource){
-        self->_dataSource = [NSMutableArray array];
+        self->_dataSource = [NSMutableArray<LBChatDetailCellModel *> array];
     }
     return self->_dataSource;
 }
@@ -78,7 +102,6 @@ static LBChatDetailVC *_chatVC;
                 view.dataSource = self;
                 view.showsHorizontalScrollIndicator = NO;
                 view.separatorStyle = UITableViewCellSeparatorStyleNone;
-                [view registerClass:[LBChatDetailCell class] forCellReuseIdentifier:cellID];
             }];
             [self.view addSubview:table];
             table;
@@ -94,49 +117,11 @@ static LBChatDetailVC *_chatVC;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return self.dataSource.count;
 }
-static NSString * const cellID = @"chatDetail";
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    LBChatDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    LBChatDetailCellModel *model = self.dataSource[indexPath.row];
+    LBChatDetailCell *cell = [LBChatDetailCell cellWithTable:tableView model:model];
     return cell;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#pragma mark -- 单例
-+ (instancetype)shareChatDetailVC{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _chatVC = [[self alloc] init];
-    });
-    return _chatVC;
-}
-
-
-+ (instancetype)allocWithZone:(struct _NSZone *)zone{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        _chatVC = [super allocWithZone:zone];
-    });
-    return _chatVC;
-}
-
-- (id)copyWithZone:(NSZone *)zone{
-    return _chatVC;
 }
 
 @end

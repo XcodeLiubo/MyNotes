@@ -14,6 +14,4 @@
 
 /** 聊天对象*/
 @property(nonatomic,copy) NSString *chatType;
-
-+ (instancetype)shareChatDetailVC;
 @end

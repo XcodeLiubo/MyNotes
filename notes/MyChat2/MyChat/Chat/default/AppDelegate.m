@@ -28,7 +28,12 @@
         view.rootViewController = nav;
         [view makeKeyAndVisible];
     }];
-    
+
+    if(!UserID){
+        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:UserNameKey];
+        [[NSUserDefaults standardUserDefaults] setObject:@"3319" forKey:LBUserID];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
     
     
     

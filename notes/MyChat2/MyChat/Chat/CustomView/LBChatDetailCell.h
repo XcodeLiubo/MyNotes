@@ -10,6 +10,5 @@
 
 @class LBChatDetailCellModel;
 @interface LBChatDetailCell : UITableViewCell
-/** model*/
-@property(nonatomic,strong) LBChatDetailCellModel *model;
++ (instancetype)cellWithTable:(UITableView *)table model:(LBChatDetailCellModel *)model;
 @end

@@ -18,6 +18,9 @@
 #import "LBChatDetailCell.h"
 #import "LBChatDetailCellModel.h"
 
+
+#import <stdlib.h>
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-unsafe-retained-assign"
 
@@ -27,6 +30,10 @@
     UILabel     *_currentNameLab;
     UIButton    *_currentContentBtn;
 }
+
+/** model*/
+@property(nonatomic,strong) LBChatDetailCellModel *model;
+
 /** 发送的时间*/
 @property(nonatomic,weak) UILabel *sendTimeLab;
 
@@ -55,12 +62,26 @@
 
 @implementation LBChatDetailCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
+
+#pragma mark -- public
+static NSString * const cellID = @"chatDetail";
++ (instancetype)cellWithTable:(UITableView *)table model:(LBChatDetailCellModel *)model{
+    if(!model)return nil;
+    LBChatDetailCell *cell = [table dequeueReusableCellWithIdentifier:cellID];
+    if(!cell) {
+        cell = [[LBChatDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
+
+    cell.model = model;
+    return cell;
 }
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    return (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier],[self setUPUI],self);
+}
 
-
+#pragma mark -- system
 - (instancetype)initWithFrame:(CGRect)frame{
     return ((self = [super initWithFrame:frame]),
             (self == nil?:[self setUPUI]),
@@ -86,6 +107,16 @@
     _nameLab = ({
         UILabel *label = [self labelWithFont:13 textAlignment:NSTextAlignmentLeft numberOfLines:1 textColor:nil backGroundColor:[UIColor whiteColor]];
         
+        [self.contentView addSubview:label];
+        label;
+    });
+    
+    
+    _mainLab = ({
+        UILabel *label = [self labelWithFont:12 textAlignment:NSTextAlignmentCenter numberOfLines:1 textColor:[UIColor whiteColor] backGroundColor:[UIColor redColor]];
+        label.layer.cornerRadius = 3;
+        label.layer.masksToBounds = YES;
+        label.hidden = YES;
         [self.contentView addSubview:label];
         label;
     });
@@ -152,6 +183,13 @@
         
     }];
     
+    [_mainLab makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(60);
+        make.height.equalTo(21);
+        make.left.equalTo(_nameLab.m_x).offset(8);
+        make.centerY.equalTo(_nameLab.centerY);
+    }];
+    
     [_contentBtn makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_nameLab.bottom).offset(offset);
         make.left.equalTo(_nameLab.left);
@@ -184,8 +222,7 @@
 
 
 
-
-
+#pragma mark -- 更新数据源
 - (void)setModel:(LBChatDetailCellModel *)model{
     _model = model;
     
@@ -199,18 +236,30 @@
     
     _currentContentBtn.hidden = _currentNameLab.hidden = _currentImgView.hidden = NO;
     
+    //时间
+    _sendTimeLab.text = model.showTime;
     
-    self.sendTimeLab.text = model.time;
     
     UIImage *defaultImage = [UIImage imageNamed:placeholderName];
-    [_currentImgView sd_setImageWithURL:model.iconUrl placeholderImage:defaultImage];
+    NSURL *url = [NSURL URLWithString:model.iconUrl];
+    
+    [_currentImgView sd_setImageWithURL:url placeholderImage:defaultImage];
     
     _currentNameLab.text = model.nickName;
     
-    [_currentContentBtn setTitle:model.content forState:UIControlStateNormal];
+    //[_currentContentBtn setTitle:model.content forState:UIControlStateNormal];
     
     
 }
+
+
+
+
+
+
+
+
+
 
 
 #pragma mark -- 工具方法

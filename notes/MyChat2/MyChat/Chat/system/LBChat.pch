@@ -17,11 +17,29 @@
 #import "UIView+LBView.h"
 #import "GlobalConstVar.h"
 
+/*        ****************** 存储 *******************/
+#define LBUserID @"userID"
+#define UserID [[NSUserDefaults standardUserDefaults] objectForKey:LBUserID]
+
+#define UserNameKey @"userName"
+#define UserName [[NSUserDefaults standardUserDefaults] objectForKey:UserNameKey]
+
+#define Objc_same(str1,str2) [str1 isEqualToString:str2]
+
+
+
+
+
 
 /*        ****************** 尺寸 *******************/
 #define SCREEN_bounds UIScreen.mainScreen.bounds
 #define SCREEN_W    UIScreen.mainScreen.bounds.size.width
 #define SCREEN_H    UIScreen.mainScreen.bounds.size.height
+
+
+
+
+
 
 
 
@@ -32,6 +50,31 @@
 
 
 
+
+
+
+
+
+/*        ****************** 方便 *******************/
+#define OBJC_Model [[[self class] alloc] init]
+
+
+
+
+
+
+
+
+
+
 #endif
+
+
+
+
+
+
+
+
 
 #endif /* LBChat_pch */

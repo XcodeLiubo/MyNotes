@@ -13,6 +13,7 @@
 		3AAD7A0B1F63BAED00A731B3 /* UIImage+LBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A0A1F63BAED00A731B3 /* UIImage+LBImage.m */; };
 		3AAD7A0F1F63BCBD00A731B3 /* LBChatDetailCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A0E1F63BCBD00A731B3 /* LBChatDetailCellModel.m */; };
 		3AAD7A111F63D58700A731B3 /* GlobalConstVar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A101F63D58700A731B3 /* GlobalConstVar.m */; };
+		3AAD7A151F63D96500A731B3 /* LBToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A141F63D96500A731B3 /* LBToolBar.m */; };
 		3AC1B3E11F6387B100CFDCD0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3AC1B3CD1F6387B100CFDCD0 /* Assets.xcassets */; };
 		3AC1B3E21F6387B100CFDCD0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3AC1B3CE1F6387B100CFDCD0 /* LaunchScreen.storyboard */; };
 		3AC1B3E31F6387B100CFDCD0 /* UIControl+LBControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC1B3D21F6387B100CFDCD0 /* UIControl+LBControl.m */; };
@@ -23,6 +24,9 @@
 		3AC1B3E81F6387B100CFDCD0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AC1B3E01F6387B100CFDCD0 /* Info.plist */; };
 		3AC1B3F21F638FDD00CFDCD0 /* LBChatVcManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC1B3F11F638FDD00CFDCD0 /* LBChatVcManager.m */; };
 		3AC1B3F51F639FB800CFDCD0 /* LBChatDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC1B3F41F639FB800CFDCD0 /* LBChatDetailVC.m */; };
+		3AC8021D1F6410CD00AF3783 /* LBChatListCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8021C1F6410CD00AF3783 /* LBChatListCellModel.m */; };
+		3AC802201F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */; };
+		3AC802261F6443ED00AF3783 /* history.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3AC802251F6443ED00AF3783 /* history.plist */; };
 		3AE9C3351F62CE4600F59976 /* MyChatTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C3341F62CE4600F59976 /* MyChatTests.m */; };
 		3AE9C3401F62CE4600F59976 /* MyChatUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AE9C33F1F62CE4600F59976 /* MyChatUITests.m */; };
 		A2BEE22923498422DECF1781 /* libPods-MyChat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA66F1BAC0643565441D01D9 /* libPods-MyChat.a */; };
@@ -59,6 +63,8 @@
 		3AAD7A0E1F63BCBD00A731B3 /* LBChatDetailCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatDetailCellModel.m; sourceTree = "<group>"; };
 		3AAD7A101F63D58700A731B3 /* GlobalConstVar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GlobalConstVar.m; sourceTree = "<group>"; };
 		3AAD7A121F63D6DC00A731B3 /* GlobalConstVar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalConstVar.h; sourceTree = "<group>"; };
+		3AAD7A131F63D96500A731B3 /* LBToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBToolBar.h; sourceTree = "<group>"; };
+		3AAD7A141F63D96500A731B3 /* LBToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBToolBar.m; sourceTree = "<group>"; };
 		3AC1B3CD1F6387B100CFDCD0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3AC1B3CF1F6387B100CFDCD0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3AC1B3D11F6387B100CFDCD0 /* UIControl+LBControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIControl+LBControl.h"; sourceTree = "<group>"; };
@@ -76,6 +82,11 @@
 		3AC1B3F11F638FDD00CFDCD0 /* LBChatVcManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatVcManager.m; sourceTree = "<group>"; };
 		3AC1B3F31F639FB800CFDCD0 /* LBChatDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChatDetailVC.h; sourceTree = "<group>"; };
 		3AC1B3F41F639FB800CFDCD0 /* LBChatDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatDetailVC.m; sourceTree = "<group>"; };
+		3AC8021B1F6410CD00AF3783 /* LBChatListCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChatListCellModel.h; sourceTree = "<group>"; };
+		3AC8021C1F6410CD00AF3783 /* LBChatListCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatListCellModel.m; sourceTree = "<group>"; };
+		3AC8021E1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LBModelQuicklyCreate.h"; sourceTree = "<group>"; };
+		3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LBModelQuicklyCreate.m"; sourceTree = "<group>"; };
+		3AC802251F6443ED00AF3783 /* history.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = history.plist; sourceTree = "<group>"; };
 		3AE9C3171F62CE4600F59976 /* MyChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE9C3301F62CE4600F59976 /* MyChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE9C3341F62CE4600F59976 /* MyChatTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyChatTests.m; sourceTree = "<group>"; };
@@ -148,6 +159,8 @@
 			children = (
 				3AAD7A0D1F63BCBD00A731B3 /* LBChatDetailCellModel.h */,
 				3AAD7A0E1F63BCBD00A731B3 /* LBChatDetailCellModel.m */,
+				3AC8021B1F6410CD00AF3783 /* LBChatListCellModel.h */,
+				3AC8021C1F6410CD00AF3783 /* LBChatListCellModel.m */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -164,6 +177,7 @@
 		3AC1B3CC1F6387B100CFDCD0 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				3AC802251F6443ED00AF3783 /* history.plist */,
 				3AC1B3CD1F6387B100CFDCD0 /* Assets.xcassets */,
 				3AC1B3CE1F6387B100CFDCD0 /* LaunchScreen.storyboard */,
 				3AC1B3D51F6387B100CFDCD0 /* CustomView */,
@@ -194,6 +208,10 @@
 			children = (
 				3AAD7A061F63B50300A731B3 /* LBChatDetailCell.h */,
 				3AAD7A071F63B50300A731B3 /* LBChatDetailCell.m */,
+				3AAD7A131F63D96500A731B3 /* LBToolBar.h */,
+				3AAD7A141F63D96500A731B3 /* LBToolBar.m */,
+				3AC8021E1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.h */,
+				3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -407,6 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3AC1B3E11F6387B100CFDCD0 /* Assets.xcassets in Resources */,
+				3AC802261F6443ED00AF3783 /* history.plist in Resources */,
 				3AC1B3E21F6387B100CFDCD0 /* LaunchScreen.storyboard in Resources */,
 				3AC1B3E81F6387B100CFDCD0 /* Info.plist in Resources */,
 			);
@@ -576,9 +595,12 @@
 				3AAD7A0B1F63BAED00A731B3 /* UIImage+LBImage.m in Sources */,
 				3AC1B3E31F6387B100CFDCD0 /* UIControl+LBControl.m in Sources */,
 				3AC1B3F21F638FDD00CFDCD0 /* LBChatVcManager.m in Sources */,
+				3AC8021D1F6410CD00AF3783 /* LBChatListCellModel.m in Sources */,
+				3AAD7A151F63D96500A731B3 /* LBToolBar.m in Sources */,
 				3AC1B3F51F639FB800CFDCD0 /* LBChatDetailVC.m in Sources */,
 				3AAD7A051F63B4DA00A731B3 /* LBChatDetailManager.m in Sources */,
 				3AC1B3E41F6387B100CFDCD0 /* UIView+LBView.m in Sources */,
+				3AC802201F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m in Sources */,
 				3AAD7A111F63D58700A731B3 /* GlobalConstVar.m in Sources */,
 				3AC1B3E61F6387B100CFDCD0 /* main.m in Sources */,
 				3AAD7A081F63B50300A731B3 /* LBChatDetailCell.m in Sources */,

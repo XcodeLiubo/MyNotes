@@ -9,14 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface LBChatDetailCellModel : NSObject
+
 /** 消息发送的时间*/
-@property(nonatomic,copy) NSString *time;
+@property(nonatomic,assign) long time;
 
 /** 发送人的id*/
 @property(nonatomic,assign) NSInteger friendID;
 
 /** icon*/
-@property(nonatomic,copy) NSURL *iconUrl;
+@property(nonatomic,copy) NSString *iconUrl;
 
 /** name*/
 @property(nonatomic,copy) NSString *nickName;
@@ -31,5 +32,11 @@
 
 /** me or other*/
 @property(nonatomic,assign,getter=isMe) BOOL me;
+
+/** 是否操盘人*/
+@property(nonatomic,assign,getter=isStockOperation) BOOL stockOperation;
+
+/** should show time*/
+@property(nonatomic,copy) NSString *showTime;
 
 @end

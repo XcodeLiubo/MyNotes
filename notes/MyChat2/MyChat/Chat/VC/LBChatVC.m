@@ -15,6 +15,8 @@
 
 #import "LBChatVC.h"
 #import "LBChatVcManager.h"
+#import "LBChatListCellModel.h"
+#import "NSObject+LBModelQuicklyCreate.h"
 #define mine [LBChatVcManager shareChatVcMGR]
 
 @interface LBChatVC ()<UITableViewDelegate, UITableViewDataSource>
@@ -64,8 +66,9 @@
     return _tableView;
 }
 
-- (NSMutableArray *)dataArray{
+- (NSMutableArray<LBChatListCellModel *> *)dataArray{
     if (!_dataArray){
+        _dataArray = [NSMutableArray array];
         NSArray *list = @[
                           @{@"chatType":@"我自己", @"chatID":@"0", @"icon":@""},
                           @{@"chatType":@"朋友1", @"chatID":@"1", @"icon":@""},
@@ -75,7 +78,9 @@
                           @{@"chatType":@"队友", @"chatID":@"5", @"icon":@""},
                           @{@"chatType":@"群聊", @"chatID":@"6", @"icon":@""}
                           ];
-        self->_dataArray = [list mutableCopy];
+        for (NSDictionary *dic in list) {
+            [_dataArray addObject:[LBChatListCellModel modelWithDic:dic]];
+        }
         
     }
     return self->_dataArray;
@@ -89,16 +94,14 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [mine cellWithTable:tableView];
-    
-    [mine setChatInfoWith:cell data:self.dataArray index:indexPath];
-    
+    UITableViewCell *cell = [mine cellWithTable:tableView model:_dataArray[indexPath.row]];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-    [mine pushChatSelectedChatToDetailVCWith:cell VC:self.navigationController];
+    LBChatListCellModel *model = self.dataArray[indexPath.row];
+    
+    [mine pushChatSelectedChatToDetailVCWith:model VC:self.navigationController];
 }
 
 
