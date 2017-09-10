@@ -90,8 +90,8 @@
 		3AC1B3F41F639FB800CFDCD0 /* LBChatDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatDetailVC.m; sourceTree = "<group>"; };
 		3AC8021B1F6410CD00AF3783 /* LBChatListCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChatListCellModel.h; sourceTree = "<group>"; };
 		3AC8021C1F6410CD00AF3783 /* LBChatListCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatListCellModel.m; sourceTree = "<group>"; };
-		3AC8021E1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+LBModelQuicklyCreate.h"; sourceTree = "<group>"; };
-		3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+LBModelQuicklyCreate.m"; sourceTree = "<group>"; };
+		3AC8021E1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+LBModelQuicklyCreate.h"; path = "../CustomView/NSObject+LBModelQuicklyCreate.h"; sourceTree = "<group>"; };
+		3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+LBModelQuicklyCreate.m"; path = "../CustomView/NSObject+LBModelQuicklyCreate.m"; sourceTree = "<group>"; };
 		3AC802251F6443ED00AF3783 /* history.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = history.plist; sourceTree = "<group>"; };
 		3AE9C3171F62CE4600F59976 /* MyChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3AE9C3301F62CE4600F59976 /* MyChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -203,6 +203,8 @@
 		3AC1B3D01F6387B100CFDCD0 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				3AC8021E1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.h */,
+				3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */,
 				3AC1B3D11F6387B100CFDCD0 /* UIControl+LBControl.h */,
 				3AC1B3D21F6387B100CFDCD0 /* UIControl+LBControl.m */,
 				3AC1B3D31F6387B100CFDCD0 /* UIView+LBView.h */,
@@ -220,8 +222,6 @@
 				3AAD7A071F63B50300A731B3 /* LBChatDetailCell.m */,
 				3AAD7A131F63D96500A731B3 /* LBToolBar.h */,
 				3AAD7A141F63D96500A731B3 /* LBToolBar.m */,
-				3AC8021E1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.h */,
-				3AC8021F1F641B0500AF3783 /* NSObject+LBModelQuicklyCreate.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
