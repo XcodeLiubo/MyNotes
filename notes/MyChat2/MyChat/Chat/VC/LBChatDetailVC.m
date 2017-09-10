@@ -61,7 +61,7 @@ NSString * const keyTotals = @"totals";
     
     sqlite3_close(_db_chat_server);
     sqlite3_close(_db_chat_local_history);
-    dispatch_suspend(_gcd_timer);
+    //dispatch_suspend(_gcd_timer);
     self.navigationController.toolbarHidden = YES;
 }
 
