@@ -12,6 +12,7 @@
 
 #import <MJRefresh/MJRefresh.h>
 #import <sqlite3.h>
+#import <SVProgressHUD/SVProgressHUD.h>
 
 
 #import "LBChatDetailVC.h"
@@ -108,7 +109,7 @@ NSString * const keyTotals = @"totals";
     
     //打开模拟的服务器的数据库
     _isOpenServerSql = NO;
-    char const *sqlServerPath = "/Users/liubo/Desktop/聊天数据/lbChat.sqlite";
+    char const *sqlServerPath = [[NSBundle mainBundle] pathForResource:@"lbChat.sqlite" ofType:nil].UTF8String;
     int result = sqlite3_open(sqlServerPath, &_db_chat_server);
     if(result == SQLITE_OK){
         _isOpenServerSql = YES;
@@ -120,12 +121,12 @@ NSString * const keyTotals = @"totals";
     
     //打开本地历史的数据库
     NSString *sqlLocalHistoryPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).lastObject;
-    sqlLocalHistoryPath = [sqlLocalHistoryPath stringByAppendingPathComponent:@"history_db"];
+    sqlLocalHistoryPath = [sqlLocalHistoryPath stringByAppendingPathComponent:@"history_db.sqlite"];
     
     result = sqlite3_open(sqlLocalHistoryPath.UTF8String, &_db_chat_local_history);
     if(result == SQLITE_OK){
         //建表
-        NSString *sql = [NSString stringWithFormat:@"CREATE TABLE t_history_chat_%zd(headImg TEXT, createTime TEXT NOT NULL, ID TEXT NOT NULL, memberID TEXT NOT NULL, memberNickName TEXT NOT NULL, msg TEXT NOT NULL, indexrow INTEGER PRIMARY KEY NOT NULL)",123456];
+        NSString *sql = [NSString stringWithFormat:@"CREATE TABLE if not exists t_history_chat_%zd(headImg TEXT, createTime TEXT NOT NULL, ID TEXT NOT NULL, memberID TEXT NOT NULL, memberNickName TEXT NOT NULL, msg TEXT NOT NULL, indexrow INTEGER PRIMARY KEY NOT NULL)",123456];
         char *error;
         result = sqlite3_exec(_db_chat_local_history, sql.UTF8String, NULL, NULL, &error);
         if(result == SQLITE_OK){
@@ -209,8 +210,11 @@ NSString * const keyTotals = @"totals";
                     //表示没有新消息 上次记录的和当前返回的 相等
                     if(_allMsgs == totals)
                         return ;
-                    else
+                    else{
+#warning 如果第一次没有消息显示的 没有消息的背景在这里要移除
                         hasNewMsgs = totals - _allMsgs;  //有多少条新消息
+                    }
+                    
                     _allMsgs = totals;
                     
                     /*
@@ -234,12 +238,14 @@ NSString * const keyTotals = @"totals";
                         [_dataSource addObject:model];
                     }
                     
-                    //保存到数据库中
+                    //保存到数据库中 不管有没有重叠或者间隔
                     [self saveMsgs:[_dataSource subarrayWithRange:NSMakeRange(_dataSource.count - 20, 20)]];
                     
                     [self.tableView reloadData];
                 }else{
                     //表示模拟请求失败
+                    [SVProgressHUD showErrorWithStatus:@"网络出错"];
+#warning 贴出 网络出错的背景图
                 }
                
             });
@@ -255,10 +261,6 @@ NSString * const keyTotals = @"totals";
 NSInteger _page_now = 0;
 NSInteger _offset = 20;
 - (void)requestHistoryMsgs{
-    
-    if(_isfirstInChatPage){
-        [self requestLastInfo];
-    }
     dispatch_async(_request_last_msg_queue, ^{
         NSString *sql = [NSString stringWithFormat:@"select * from t_chat limit %zd,%zd",_page_now * _offset,_offset];
         
@@ -302,12 +304,27 @@ NSInteger _offset = 20;
                         _allMsgs = [_serverTotalsDic[keyTotals] integerValue];
                         
                         
+                        if(!_allMsgs){
+                            //没有数据
+                            [SVProgressHUD showInfoWithStatus:@"没有数据"];
+                            
+                            //开启定时器
+                            //[self createGcdTimer];
+                            
+                            //标记
+                            _isfirstInChatPage = NO;
+                            
+                            return ;
+                            
+                        }
+                        
+                        
                         //解析数据
                         for (NSInteger k = resultArray.count -1; k>=0; k--) {
                             @autoreleasepool {
                                 NSDictionary *dic = resultArray[k];
                                 LBChatDetailCellModel *model = [LBChatDetailCellModel modelWithDic:dic];
-                                model.indexInAllMsgs = _allMsgs - k - 1; //是所有记录中的哪一条
+                                model.indexInAllMsgs = _allMsgs - k; //是所有记录中的哪一条
                                 [self.dataSource addObject:model];
                             }
                         }
@@ -321,19 +338,19 @@ NSInteger _offset = 20;
                         
                         
                         
-                        //存储到数据库(很复杂)  传的是最旧的数据
+                        //存储到数据库
                         //[self findLastNewMsgInHistoryDBIndexWithModel:_dataSource[0]];
                         //将20条数据存储到数据库中
-                        [self saveMsgs:resultArray];
+                        [self saveMsgs:_dataSource];
                         
                         
                         //创建定时器
-                        [self createGcdTimer];
+                        //[self createGcdTimer];
                         
                         _isfirstInChatPage = NO;
-                    }else{//下拉的时候回走这里
-                        
-                        
+                    }else{
+                        NSLog(@"下拉");
+                        [self.tableView.mj_header endRefreshing];
                         
                         //先从数据库中拿历史记录
                         
@@ -396,6 +413,8 @@ NSInteger _offset = 20;
                     
                 }else{
                     //表示模拟请求失败
+                    [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                    //[self createGcdTimer];
                 }
                 
             });
@@ -420,7 +439,7 @@ NSInteger _offset = 20;
     for (NSInteger k = 0; k < array.count; k++) {
         @autoreleasepool {
             LBChatDetailCellModel *model = array[k];
-            NSString *str = [NSString stringWithFormat:@"(%@,%ld,%zd,%zd,%@,%@,%zd),",model.iconUrl,model.time,model.friendID,model.friendID,model.nickName,model.content,model.indexInAllMsgs];
+            NSString *str = [NSString stringWithFormat:@"('%@','%ld','%zd','%zd','%@','%@',%zd),",model.iconUrl,model.time,model.friendID,model.friendID,model.nickName,model.content,model.indexInAllMsgs];
             [sql appendString:str];
         }
     }

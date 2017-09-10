@@ -11,6 +11,7 @@ target 'MyChat' do
   pod 'MJExtension'
   pod 'SDWebImage'
   pod 'AFNetworking'
+  pod 'SVProgressHUD'
   target 'MyChatTests' do
     inherit! :search_paths
     # Pods for testing
