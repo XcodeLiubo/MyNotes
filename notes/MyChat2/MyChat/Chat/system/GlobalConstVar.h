@@ -11,18 +11,19 @@
 
 
 #ifdef __OBJC__
+#define UIKIT_EXTERN_VAR UIKIT_EXTERN
+#define UIKIT_EXTERN_FUN UIKIT_EXTERN
+
 #import <UIKit/UIKit.h>
-UIKIT_EXTERN NSString * const placeholderName;
-UIKIT_EXTERN long const dayMS;
+UIKIT_EXTERN_VAR NSString * const placeholderName;
+UIKIT_EXTERN_VAR long const dayMS;
 
 
 
-
-
-UIKIT_EXTERN NSString *dateStr(long timeInterval, bool isBeyondDay);
-
-UIKIT_EXTERN long _time_now();
-
+UIKIT_EXTERN_FUN NSString *dateStr(long timeInterval, bool isBeyondDay);
+UIKIT_EXTERN_FUN long _time_now();
+UIKIT_EXTERN_FUN UIImage *strechChat_Me_BgImg();
+UIKIT_EXTERN_FUN UIImage *strechChat_Oth_BgImg();
 #endif
 
 #endif /* GlobalConstVar_h */

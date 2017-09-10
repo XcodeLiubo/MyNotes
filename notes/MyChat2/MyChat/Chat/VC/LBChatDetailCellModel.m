@@ -13,7 +13,7 @@
     LBChatDetailCellModel *model = OBJC_Model;
     
         model.time  =   [dic[@"createTime"] longLongValue];
-    model.friendID  =   [dic[@"memberid"] integerValue];
+    model.friendID  =   [dic[@"memberId"] integerValue];
      model.content  =   dic[@"msg"];
      model.iconUrl  =   dic[@"headImg"];
 
@@ -42,7 +42,7 @@
 
 - (void)setNickName:(NSString *)nickName{
     if(!nickName)return;
-    
+    _nickName = nickName;
     _stockOperation = NO;
     
     if(!self.isMe && Objc_same(nickName, UserName)) _stockOperation = YES;

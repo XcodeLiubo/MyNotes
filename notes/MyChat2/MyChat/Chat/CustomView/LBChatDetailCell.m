@@ -29,6 +29,8 @@
     UIImageView *_currentImgView;
     UILabel     *_currentNameLab;
     UIButton    *_currentContentBtn;
+    UIColor     *_mainColor;        //操盘人内容字的颜色
+    UIColor     *_otherColor;       //其他人字的颜色
 }
 
 /** model*/
@@ -89,6 +91,10 @@ static NSString * const cellID = @"chatDetail";
 }
 
 - (void)setUPUI{
+    //初始化一些变量
+    _mainColor = [UIColor redColor];
+    _otherColor = [UIColor blackColor];
+    
     _sendTimeLab = ({
         
         UILabel *label = [self labelWithFont:12 textAlignment:NSTextAlignmentCenter numberOfLines:1 textColor:[UIColor whiteColor] backGroundColor:[UIColor grayColor]];
@@ -123,7 +129,9 @@ static NSString * const cellID = @"chatDetail";
     
     _contentBtn = ({
         UIButton *button = [self buttonWithType:UIButtonTypeCustom fontSize:14 numberOfLines:0 textAlignment:NSTextAlignmentLeft];
-        
+        [button setBackgroundImage:Chat_Oth_BgImg forState:UIControlStateNormal];
+        button.userInteractionEnabled = NO;
+        [button setContentEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
         [self.contentView addSubview:button];
         button;
     });
@@ -145,7 +153,9 @@ static NSString * const cellID = @"chatDetail";
     
     _myContentBtn = ({
         UIButton *button = [self buttonWithType:UIButtonTypeCustom fontSize:14 numberOfLines:0 textAlignment:NSTextAlignmentLeft];
-        
+        [button setBackgroundImage:Chat_Me_BgImg forState:UIControlStateNormal];
+        button.userInteractionEnabled = NO;
+        [button setContentEdgeInsets:UIEdgeInsetsMake(10, 10, 10, 10)];
         [self.contentView addSubview:button];
         button;
     });
@@ -172,7 +182,7 @@ static NSString * const cellID = @"chatDetail";
         make.left.offset(offset);
         
         top_offset = top_offset + 3;
-        make.top.offset(top_offset);
+        make.top.equalTo(_sendTimeLab.bottom).offset(top_offset);
     }];
     
     [_nameLab makeConstraints:^(MASConstraintMaker *make) {
@@ -186,14 +196,15 @@ static NSString * const cellID = @"chatDetail";
     [_mainLab makeConstraints:^(MASConstraintMaker *make) {
         make.width.equalTo(60);
         make.height.equalTo(21);
-        make.left.equalTo(_nameLab.m_x).offset(8);
+        make.left.equalTo(_nameLab.right).offset(8);
         make.centerY.equalTo(_nameLab.centerY);
     }];
     
     [_contentBtn makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_nameLab.bottom).offset(offset);
         make.left.equalTo(_nameLab.left);
-        make.width.lessThanOrEqualTo(SCREEN_W * 2/3);
+        make.width.lessThanOrEqualTo(220);
+        make.height.equalTo(21);
     }];
     
     
@@ -214,7 +225,8 @@ static NSString * const cellID = @"chatDetail";
     [_myContentBtn makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_contentBtn);
         make.right.equalTo(_myNameLab);
-        make.width.lessThanOrEqualTo(SCREEN_W * 2/3);
+        make.width.lessThanOrEqualTo(220);
+        make.height.equalTo(21);
     }];
     
 }
@@ -230,25 +242,40 @@ static NSString * const cellID = @"chatDetail";
         _currentImgView = _myIcon, _currentNameLab = _myNameLab, _currentContentBtn = _myContentBtn;
         _icon.hidden = _nameLab.hidden = _contentBtn.hidden = YES;
     }else{
-        _currentImgView = _icon, _currentNameLab = _nameLab, _currentContentBtn = _myContentBtn;
+        _currentImgView = _icon, _currentNameLab = _nameLab, _currentContentBtn = _contentBtn;
         _myIcon.hidden = _myNameLab.hidden = _myContentBtn.hidden = YES;
     }
-    
     _currentContentBtn.hidden = _currentNameLab.hidden = _currentImgView.hidden = NO;
+    
     
     //时间
     _sendTimeLab.text = model.showTime;
     
+    //操盘
+    _mainLab.hidden = !model.isStockOperation;
     
-    UIImage *defaultImage = [UIImage imageNamed:placeholderName];
+    
+    //头像
     NSURL *url = [NSURL URLWithString:model.iconUrl];
+    [_currentImgView sd_setImageWithURL:url placeholderImage:Chat_Default_Img];
     
-    [_currentImgView sd_setImageWithURL:url placeholderImage:defaultImage];
-    
+    //昵称
     _currentNameLab.text = model.nickName;
     
-    //[_currentContentBtn setTitle:model.content forState:UIControlStateNormal];
+    //发的内容
+    [_currentContentBtn setTitle:model.content forState:UIControlStateNormal];
+    if(_mainLab.hidden) [_currentContentBtn setTitleColor:_otherColor forState:UIControlStateNormal];
+    else                [_currentContentBtn setTitleColor:_mainColor forState:UIControlStateNormal];
+        
     
+    //强制布局
+    [_currentContentBtn layoutIfNeeded];
+    [_currentContentBtn updateConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(_currentContentBtn.titleLabel.h);
+    }];
+    
+    [self layoutIfNeeded];
+    _model.cellH = _currentContentBtn.m_y + 30;
     
 }
 

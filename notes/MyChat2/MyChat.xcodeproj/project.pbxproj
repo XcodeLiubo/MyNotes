@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		31986EAABB6FDCC74FB3D990 /* libPods-MyChatTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF09575374D9785168BC1069 /* libPods-MyChatTests.a */; };
+		3A1367A71F651BE800B9C572 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1367A61F651BE800B9C572 /* libsqlite3.tbd */; };
+		3A61FF031F64DDF8004EDC71 /* chat.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A61FF021F64DDF8004EDC71 /* chat.plist */; };
 		3AAD7A051F63B4DA00A731B3 /* LBChatDetailManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A041F63B4DA00A731B3 /* LBChatDetailManager.m */; };
 		3AAD7A081F63B50300A731B3 /* LBChatDetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A071F63B50300A731B3 /* LBChatDetailCell.m */; };
 		3AAD7A0B1F63BAED00A731B3 /* UIImage+LBImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AAD7A0A1F63BAED00A731B3 /* UIImage+LBImage.m */; };
@@ -53,6 +55,8 @@
 /* Begin PBXFileReference section */
 		1DDF218FE12D780EFD56ADFB /* Pods-MyChatUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChatUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyChatUITests/Pods-MyChatUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		312C4F0D98CEAD64E32F2EA3 /* Pods-MyChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyChatTests/Pods-MyChatTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3A1367A61F651BE800B9C572 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		3A61FF021F64DDF8004EDC71 /* chat.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = chat.plist; sourceTree = "<group>"; };
 		3AAD7A031F63B4DA00A731B3 /* LBChatDetailManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChatDetailManager.h; sourceTree = "<group>"; };
 		3AAD7A041F63B4DA00A731B3 /* LBChatDetailManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LBChatDetailManager.m; sourceTree = "<group>"; };
 		3AAD7A061F63B50300A731B3 /* LBChatDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LBChatDetailCell.h; sourceTree = "<group>"; };
@@ -108,6 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A1367A71F651BE800B9C572 /* libsqlite3.tbd in Frameworks */,
 				A2BEE22923498422DECF1781 /* libPods-MyChat.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,6 +139,7 @@
 		0524DBCCE67FE53E4E490E07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3A1367A61F651BE800B9C572 /* libsqlite3.tbd */,
 				BA66F1BAC0643565441D01D9 /* libPods-MyChat.a */,
 				AF09575374D9785168BC1069 /* libPods-MyChatTests.a */,
 				4A6002D3AD424A144000A023 /* libPods-MyChatUITests.a */,
@@ -178,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				3AC802251F6443ED00AF3783 /* history.plist */,
+				3A61FF021F64DDF8004EDC71 /* chat.plist */,
 				3AC1B3CD1F6387B100CFDCD0 /* Assets.xcassets */,
 				3AC1B3CE1F6387B100CFDCD0 /* LaunchScreen.storyboard */,
 				3AC1B3D51F6387B100CFDCD0 /* CustomView */,
@@ -424,6 +431,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A61FF031F64DDF8004EDC71 /* chat.plist in Resources */,
 				3AC1B3E11F6387B100CFDCD0 /* Assets.xcassets in Resources */,
 				3AC802261F6443ED00AF3783 /* history.plist in Resources */,
 				3AC1B3E21F6387B100CFDCD0 /* LaunchScreen.storyboard in Resources */,

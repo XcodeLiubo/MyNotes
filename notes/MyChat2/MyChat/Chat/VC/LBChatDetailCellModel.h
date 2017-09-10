@@ -39,4 +39,7 @@
 /** should show time*/
 @property(nonatomic,copy) NSString *showTime;
 
+/** 所有的记录中的哪一条 这个值是不会改变的  是自己手动算出来的*/
+@property(nonatomic,assign) NSInteger indexInAllMsgs;
+
 @end

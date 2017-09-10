@@ -30,8 +30,8 @@
     }];
 
     if(!UserID){
-        [[NSUserDefaults standardUserDefaults] setObject:@"" forKey:UserNameKey];
-        [[NSUserDefaults standardUserDefaults] setObject:@"3319" forKey:LBUserID];
+        [[NSUserDefaults standardUserDefaults] setObject:@"军哥" forKey:UserNameKey];
+        [[NSUserDefaults standardUserDefaults] setObject:@"31319" forKey:LBUserID];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
     

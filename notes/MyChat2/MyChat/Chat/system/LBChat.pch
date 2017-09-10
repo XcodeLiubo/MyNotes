@@ -23,7 +23,6 @@
 
 #define UserNameKey @"userName"
 #define UserName [[NSUserDefaults standardUserDefaults] objectForKey:UserNameKey]
-
 #define Objc_same(str1,str2) [str1 isEqualToString:str2]
 
 
@@ -57,12 +56,10 @@
 
 /*        ****************** 方便 *******************/
 #define OBJC_Model [[[self class] alloc] init]
+#define Chat_Default_Img [UIImage imageNamed:placeholderName]
 
-
-
-
-
-
+#define Chat_Me_BgImg  (strechChat_Me_BgImg())
+#define Chat_Oth_BgImg (strechChat_Oth_BgImg())
 
 
 
