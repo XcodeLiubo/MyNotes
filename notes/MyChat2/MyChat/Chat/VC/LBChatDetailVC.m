@@ -52,7 +52,7 @@ NSString * const keyTotals = @"totals";
     
     bool _isfirstInChatPage;                    //是否第一次进入聊天界面
     NSInteger _didLoadHistoryMsgs;              //已经加载了多少条历史记录了
-    NSInteger _firstInpageRecordMsgs;           //只记录进入页面时 服务器返回消息的总量
+    NSInteger _firstInpageRecordMsgs;           //只记录进入页面时 服务器返回消息的总量 或者没有网络时 获取本地历史数据库的总记录数
     
 }
 
@@ -75,8 +75,12 @@ NSString * const keyTotals = @"totals";
     dispatch_cancel(_gcd_timer);
     _gcd_timer = nil;
     
-    [[NSUserDefaults standardUserDefaults] setObject:@(_allMsgs) forKey:self._t_name];
-    [[NSUserDefaults standardUserDefaults] synchronize];
+    //数据库中最后一条数据的下标
+    UserSave(@(_allMsgs), self._t_name);
+    //本地历史数据库里面 有多少条记录
+    _firstInpageRecordMsgs = [self recordHistoryInLocalMsgs];
+    UserSave(@(_firstInpageRecordMsgs), history_msgs_in_localdb_key);
+    
     
     self.navigationController.toolbarHidden = YES;
 }
@@ -123,8 +127,17 @@ NSString * const keyTotals = @"totals";
     //假设现在数据源存储的总量是 626 这里是模拟
     [_serverTotalsDic setValue:@"626" forKey:keyTotals];
     
+    [self openServerDB];        //模拟的服务器数据库
     
+    [self openLocalHistoryDB];  //本地历史数据库
     
+    [self createGcdTimer];      //创建定时器
+    
+    [self requestHistoryMsgs];  //默认下拉一次 获取最新信息
+}
+
+#pragma mark --- 打开模拟的服务器数据库
+- (void)openServerDB{
     //打开模拟的服务器的数据库
     _isOpenServerSql = NO;
     char const *sqlServerPath = [[NSBundle mainBundle] pathForResource:@"lbChat.sqlite" ofType:nil].UTF8String;
@@ -134,17 +147,14 @@ NSString * const keyTotals = @"totals";
     }else{
         _isOpenServerSql = NO;
     }
-    
-    
-    //创建定时器
-    [self createGcdTimer];
-    
-    
+}
+#pragma mark --- 打开本地历史的数据库 并决定是否建表
+- (void)openLocalHistoryDB{
     //打开本地历史的数据库
     NSString *sqlLocalHistoryPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).lastObject;
     sqlLocalHistoryPath = [sqlLocalHistoryPath stringByAppendingPathComponent:@"history_db.sqlite"];
     
-    result = sqlite3_open(sqlLocalHistoryPath.UTF8String, &_db_chat_local_history);
+    int result = sqlite3_open(sqlLocalHistoryPath.UTF8String, &_db_chat_local_history);
     if(result == SQLITE_OK){
         //建表
         NSString *sql = [NSString stringWithFormat:@"CREATE TABLE if not exists %@(headImg TEXT, createTime TEXT NOT NULL, ID TEXT NOT NULL, memberID TEXT NOT NULL, memberNickName TEXT NOT NULL, msg TEXT NOT NULL, indexrow INTEGER PRIMARY KEY NOT NULL)",self._t_name];
@@ -154,9 +164,8 @@ NSString * const keyTotals = @"totals";
             //创建队列
             _request_last_msg_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
-            //默认下拉一次
+            //标记
             _isfirstInChatPage = YES;
-            [self requestHistoryMsgs];
             
             
         }else{
@@ -164,7 +173,7 @@ NSString * const keyTotals = @"totals";
         }
         
     }else{
-        
+        NSLog(@"打开数据库失败");
     }
 }
 
@@ -285,10 +294,10 @@ NSInteger _offset = 20;
 - (void)requestHistoryMsgs{
     if(_isfirstInChatPage){ //主线程中
         dispatch_async(_request_last_msg_queue, ^{
-            NSMutableArray *resultArray = [NSMutableArray array];
+            __block NSMutableArray *resultArray = [NSMutableArray array];
             [self requestMsgsArray:&resultArray page:0 offset:_offset];
             
-            
+            //这里不考虑重叠或者间隔的数据了 因为 insert 语句会略掉重复的
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 if(resultArray.count && _allMsgs){
@@ -308,13 +317,15 @@ NSInteger _offset = 20;
                     
                     
                 }else{
-                    //这里贴出一张背景图 或者直接加载最近的历史记录
-                    NSInteger index = [HistoryMsgsMax(self._t_name) integerValue];
-                    NSMutableArray *resultArray = [NSMutableArray array];
+                    //加载的本地数据
+                    //_firstInpageRecordMsgs == _allMsgs == 0
+                    NSNumber *index = HistoryMsgsMax(self._t_name);
+                    _firstInpageRecordMsgs = [self recordHistoryInLocalMsgs];
                     if(index){
-                        [self loadHistoryWithIndex:index array:&resultArray];
+                        NSInteger begin = [index integerValue];
+                        [self loadHistoryWithIndex:begin array:&resultArray];
                         if(resultArray.count){
-                            [self ecodeServerDataWithArray:resultArray beginIndex:index encodeType:EncodeTypeLocal];
+                            [self ecodeServerDataWithArray:resultArray beginIndex:begin encodeType:EncodeTypeLocal];
                             [self.tableView reloadData];
                             
                             //滚动到最后面去
@@ -419,6 +430,24 @@ NSInteger _offset = 20;
         }
     }
 }
+#pragma mark --- 本地数据库中的消息的数目
+/** 本地历史消息的数据库中多少条记录 */
+- (NSInteger)recordHistoryInLocalMsgs{
+    NSInteger historyMsgs = history_msgs_in_localdb_count;
+    
+    if(historyMsgs){
+        
+        return historyMsgs;
+    }
+    
+    NSString *sql = [NSString stringWithFormat:@"select count(rowid) from %@",self._t_name];
+    sqlite3_stmt *stmt;
+    sqlite3_prepare_v2(_db_chat_local_history, sql.UTF8String, -1, &stmt, NULL);
+    if(sqlite3_step(stmt) == SQLITE_ROW)
+        historyMsgs = sqlite3_column_int(stmt, 0);
+   
+    return historyMsgs;
+}
 
 
 #pragma mark ---  去本地拿历史数据
@@ -475,6 +504,7 @@ NSInteger _offset = 20;
 
 #pragma mark --- 模拟服务器请求数据
 - (void)requestMsgsArray:(NSMutableArray **)resultArray page:(NSInteger)page offset:(NSInteger)offset{
+    //这里是模拟, 没有用排序的查询语句  真实请求 服务器自动回返回有顺序的
     NSString *sql = [NSString stringWithFormat:@"select * from t_chat limit %zd,%zd",page * offset,offset];
     
     sqlite3_stmt *stmt;
@@ -485,8 +515,9 @@ NSInteger _offset = 20;
         //拿到服务器返回的总数
         _allMsgs = [[_serverTotalsDic objectForKey:keyTotals] integerValue];
         
-        if(_isfirstInChatPage){
+        if(_isfirstInChatPage){ //只记录这一次
             _firstInpageRecordMsgs = _allMsgs;
+            if(!_firstInpageRecordMsgs)return;
         }
         
         while(sqlite3_step(stmt) == SQLITE_ROW){

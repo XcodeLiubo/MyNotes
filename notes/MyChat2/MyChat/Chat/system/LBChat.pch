@@ -18,15 +18,22 @@
 #import "GlobalConstVar.h"
 
 /*        ****************** 存储 *******************/
+#define USER_RAM [NSUserDefaults standardUserDefaults]
+#define UserSave(VAR,KEY) ([USER_RAM setObject:VAR forKey:KEY],[USER_RAM synchronize])
+#define UserGet(KEY) ([USER_RAM objectForKey:KEY])
+
 #define LBUserID @"userID"
-#define UserID [[NSUserDefaults standardUserDefaults] objectForKey:LBUserID]
+#define UserID UserGet(LBUserID)
 
 #define UserNameKey @"userName"
-#define UserName [[NSUserDefaults standardUserDefaults] objectForKey:UserNameKey]
+#define UserName UserGet(UserNameKey)
 #define Objc_same(str1,str2) [str1 isEqualToString:str2]
 
 #define T_ID @"t_history_chat_123456"
-#define HistoryMsgsMax(T_ID) [[NSUserDefaults standardUserDefaults] objectForKey:T_ID]
+#define HistoryMsgsMax(T_ID)  UserGet(T_ID) //本地存储的记录最大的一条
+#define history_msgs_in_localdb_key @"allHistoryMsgsInLocalDBKey"
+#define history_msgs_in_localdb_count [UserGet(history_msgs_in_localdb_key) integerValue]
+
 
 
 

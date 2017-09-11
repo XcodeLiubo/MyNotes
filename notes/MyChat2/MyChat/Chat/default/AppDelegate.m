@@ -30,9 +30,8 @@
     }];
 
     if(!UserID){
-        [[NSUserDefaults standardUserDefaults] setObject:@"军哥" forKey:UserNameKey];
-        [[NSUserDefaults standardUserDefaults] setObject:@"31319" forKey:LBUserID];
-        [[NSUserDefaults standardUserDefaults] synchronize];
+        UserSave(@"军哥", UserNameKey);
+        UserSave(@"31319", LBUserID);
     }
     
     
