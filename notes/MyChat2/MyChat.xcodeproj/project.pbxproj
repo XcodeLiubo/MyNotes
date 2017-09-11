@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B2874E11F663A0B00D23187 /* 下拉分析 in Resources */ = {isa = PBXBuildFile; fileRef = 2B2874E01F663A0B00D23187 /* 下拉分析 */; };
 		31986EAABB6FDCC74FB3D990 /* libPods-MyChatTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AF09575374D9785168BC1069 /* libPods-MyChatTests.a */; };
 		3A1367A71F651BE800B9C572 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A1367A61F651BE800B9C572 /* libsqlite3.tbd */; };
 		3A1367A91F6565BA00B9C572 /* lbChat.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 3A1367A81F6565BA00B9C572 /* lbChat.sqlite */; };
@@ -55,6 +56,7 @@
 
 /* Begin PBXFileReference section */
 		1DDF218FE12D780EFD56ADFB /* Pods-MyChatUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChatUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyChatUITests/Pods-MyChatUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		2B2874E01F663A0B00D23187 /* 下拉分析 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "下拉分析"; sourceTree = "<group>"; };
 		312C4F0D98CEAD64E32F2EA3 /* Pods-MyChatTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChatTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MyChatTests/Pods-MyChatTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3A1367A61F651BE800B9C572 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		3A1367A81F6565BA00B9C572 /* lbChat.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = lbChat.sqlite; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 			children = (
 				3AC1B3CC1F6387B100CFDCD0 /* Chat */,
 				3AC1B3E01F6387B100CFDCD0 /* Info.plist */,
+				2B2874E01F663A0B00D23187 /* 下拉分析 */,
 			);
 			path = MyChat;
 			sourceTree = "<group>";
@@ -434,6 +437,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2B2874E11F663A0B00D23187 /* 下拉分析 in Resources */,
 				3A61FF031F64DDF8004EDC71 /* chat.plist in Resources */,
 				3AC1B3E11F6387B100CFDCD0 /* Assets.xcassets in Resources */,
 				3AC802261F6443ED00AF3783 /* history.plist in Resources */,
@@ -759,7 +763,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ETYS29C2N4;
-				GCC_PREFIX_HEADER = "/Users/liubo/Desktop/GitHub/笔记/MyNotes/notes/MyChat2/MyChat/Chat/system/LBChat.pch";
+				GCC_PREFIX_HEADER = /Users/chyuch/Desktop/gihub/note/MyNotes/notes/MyChat2/MyChat/Chat/system/LBChat.pch;
 				INFOPLIST_FILE = MyChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -774,7 +778,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ETYS29C2N4;
-				GCC_PREFIX_HEADER = "/Users/liubo/Desktop/GitHub/笔记/MyNotes/notes/MyChat2/MyChat/Chat/system/LBChat.pch";
+				GCC_PREFIX_HEADER = /Users/chyuch/Desktop/gihub/note/MyNotes/notes/MyChat2/MyChat/Chat/system/LBChat.pch;
 				INFOPLIST_FILE = MyChat/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

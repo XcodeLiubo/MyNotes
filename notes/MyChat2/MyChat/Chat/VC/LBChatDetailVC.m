@@ -25,6 +25,13 @@
 /** 这个如果这个界面写好了 这个类用来封装的 以后做*/
 #define mine [LBChatDetailManager shareChatDetailVCMGR]
 
+
+typedef NS_ENUM(NSInteger,EncodeType){
+    EncodeTypeServer,
+    EncodeTypeLocal
+};
+
+
 NSString * const keyTotals = @"totals";
 
 @interface LBChatDetailVC ()<UITableViewDelegate, UITableViewDataSource>
@@ -45,6 +52,7 @@ NSString * const keyTotals = @"totals";
     
     bool _isfirstInChatPage;                    //是否第一次进入聊天界面
     NSInteger _didLoadHistoryMsgs;              //已经加载了多少条历史记录了
+    NSInteger _firstInpageRecordMsgs;           //只记录进入页面时 服务器返回消息的总量
     
 }
 
@@ -61,7 +69,8 @@ NSString * const keyTotals = @"totals";
     
     sqlite3_close(_db_chat_server);
     sqlite3_close(_db_chat_local_history);
-    //dispatch_suspend(_gcd_timer);
+    dispatch_cancel(_gcd_timer);
+    _gcd_timer = nil;
     self.navigationController.toolbarHidden = YES;
 }
 
@@ -118,6 +127,9 @@ NSString * const keyTotals = @"totals";
     }
     
     
+    //创建定时器
+    [self createGcdTimer];
+    
     
     //打开本地历史的数据库
     NSString *sqlLocalHistoryPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).lastObject;
@@ -147,6 +159,7 @@ NSString * const keyTotals = @"totals";
     }
 }
 
+#pragma mark --- gcd定时器
 - (void)createGcdTimer{
     dispatch_queue_t queue = dispatch_get_main_queue();
     _gcd_timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -261,168 +274,223 @@ NSString * const keyTotals = @"totals";
 NSInteger _page_now = 0;
 NSInteger _offset = 20;
 - (void)requestHistoryMsgs{
-    dispatch_async(_request_last_msg_queue, ^{
-        NSString *sql = [NSString stringWithFormat:@"select * from t_chat limit %zd,%zd",_page_now * _offset,_offset];
-        
-        sqlite3_stmt *stmt;
-        int result = sqlite3_prepare_v2(_db_chat_server, sql.UTF8String, -1, &stmt, NULL);
-        
-        
-        if (result == SQLITE_OK) {
+    if(_isfirstInChatPage){ //主线程中
+        dispatch_async(_request_last_msg_queue, ^{
             NSMutableArray *resultArray = [NSMutableArray array];
-            while(sqlite3_step(stmt) == SQLITE_ROW){
-                
-                const unsigned char *time  = sqlite3_column_text(stmt, 1);
-                const unsigned char *icon  = sqlite3_column_text(stmt, 2);
-                const unsigned char *ID    = sqlite3_column_text(stmt, 3);
-                const unsigned char *memID = sqlite3_column_text(stmt, 4);
-                const unsigned char *name  = sqlite3_column_text(stmt, 5);
-                const unsigned char *msg   = sqlite3_column_text(stmt, 6);
-                @autoreleasepool {
-                    NSDictionary *dic = @{
-                                          @"createTime":[@"" initWithUTF8String:(const char*)time],
-                                          @"headImg":[@"" initWithUTF8String:(const char*)icon],
-                                          @"id":[@"" initWithUTF8String:(const char*)ID],
-                                          @"memberId":[@"" initWithUTF8String:(const char*)memID],
-                                          @"memberNickname":[@"" initWithUTF8String:(const char*)name],
-                                          @"msg":[@"" initWithUTF8String:(const char*)msg],
-                                          };
-                    [resultArray addObject:dic];
-                }
-                
-            }
+            [self requestMsgsArray:&resultArray page:0 offset:20];
             
             
-            //上面的代码是在模拟请求, 这里是请求回来了 到主线程了
             dispatch_async(dispatch_get_main_queue(), ^{
-                if(resultArray.count){ //表示模拟请求成功
+                
+                if(resultArray.count && _allMsgs){
+                    NSInteger beginIndex = _allMsgs;
+                    [self ecodeServerDataWithArray:resultArray beginIndex:beginIndex encodeType:EncodeTypeServer];
                     
+                    //展示 并且滚动到最底部
+                    [self.tableView reloadData];
                     
-                    if(_isfirstInChatPage){ //如果是第一次 就先将数据展示到界面上
-                        
-                        //获取返回的总数
-                        _allMsgs = [_serverTotalsDic[keyTotals] integerValue];
-                        
-                        
-                        if(!_allMsgs){
-                            //没有数据
-                            [SVProgressHUD showInfoWithStatus:@"没有数据"];
-                            
-                            //开启定时器
-                            //[self createGcdTimer];
-                            
-                            //标记
-                            _isfirstInChatPage = NO;
-                            
-                            return ;
-                            
-                        }
-                        
-                        
-                        //解析数据
-                        for (NSInteger k = resultArray.count -1; k>=0; k--) {
-                            @autoreleasepool {
-                                NSDictionary *dic = resultArray[k];
-                                LBChatDetailCellModel *model = [LBChatDetailCellModel modelWithDic:dic];
-                                model.indexInAllMsgs = _allMsgs - k; //是所有记录中的哪一条
-                                [self.dataSource addObject:model];
-                            }
-                        }
-                        
-                        //展示 并且滚动到最底部
-                        [self.tableView reloadData];
-                        
 #warning 滚动的代码 但是就是滚不到最后去
-                        NSIndexPath *path = [NSIndexPath indexPathForRow:resultArray.count -1 inSection:0];
-                        [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-                        
-                        
-                        
-                        //存储到数据库
-                        //[self findLastNewMsgInHistoryDBIndexWithModel:_dataSource[0]];
-                        //将20条数据存储到数据库中
-                        [self saveMsgs:_dataSource];
-                        
-                        
-                        //创建定时器
-                        //[self createGcdTimer];
-                        
-                        _isfirstInChatPage = NO;
-                    }else{
-                        NSLog(@"下拉");
-                        [self.tableView.mj_header endRefreshing];
-                        
-                        //先从数据库中拿历史记录
-                        
-                        
-                        
-                        //拿不到去请求
-                    }
+                    NSIndexPath *path = [NSIndexPath indexPathForRow:resultArray.count -1 inSection:0];
+                    [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
                     
                     
+                    //将20条数据存储到数据库中   //[self findLastNewMsgInHistoryDBIndexWithModel:_dataSource[0]];
+                    [self saveMsgs:_dataSource];
                     
                     
-                    //情况1 假设服务器返回的数据(20条最新消息的) "最老" 的那一条就是  本地数据库里最后的那一条  直接本地数据库的 最后一条 接上去这最新的20条
-                    
-                    //情况2 假设服务器返回的数据(20条最新消息的) "最老" 的那一条和本地 数据库中最后20条数据 重叠了(一定在最后的20条之间的哪一条重叠) 找出重叠的并删除本地数据库中重叠处下表的后面的的数据 直接从重叠的下标之后接上去这最新的20条
-                    
-                    
-                    //情况2 假设服务器返回的数据 20条最新消息中的 "最老" 的那一条 在本地数据库没有找到 要算出 这最老的一条数据  和 本地数据库中 最后一条数据的 间隔是多少
-                    
-                    
-                    
-                    
-                    //以上是服务器返回的数据 和 本地历史数据 会出现的情况 但还有一种更恶心的情况
-                    
-                    /*
-                            最恶心 如果用户第一次下载app进来到聊天的界面
-                            1>  我将服务器返回的20条数据 存储到本地的数据库中
-                            
-                            
-                     
-                            2>  这个时候, 假如用户出去了这个页面
-                            
-                            3>  然后隔了一段时间再进来
-                     
-                            4>  我又将这次服务器返回的数据存储到数据库中
-                                > 这个时候, 可能出现上面的情况2(因为他出去聊天页面的这段时间 可能服务器有很多消息了), 出现第1个间隔
-                     
-                            
-                     
-                            
-                            5>  假如 用户又出去了....
-                            
-                            6>  然后又隔了一段很长的时间又进来了
-                     
-                            7>  我又将这次服务器返回的数据存储到数据库中
-                                >这个时候, 可能出现上面的情况2(因为他出去聊天页面的这段时间 可能服务器有很多消息了), 出现第2个间隔
-                     
-                     
-                            8> 继续重复 2 3 4 这几步....
-                     
-                     
-                     
-                     
-                        */
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                    //开启定时器
+                    //dispatch_resume(_gcd_timer);
                 }else{
-                    //表示模拟请求失败
-                    [SVProgressHUD showErrorWithStatus:@"网络错误"];
+                    [SVProgressHUD showInfoWithStatus:@"没有数据"];
+                    
                     //[self createGcdTimer];
                 }
                 
+                _isfirstInChatPage = NO;
+                _didLoadHistoryMsgs = resultArray.count;
             });
             
+        });
+        
+    }else{
+        if(_didLoadHistoryMsgs == _firstInpageRecordMsgs){
+            [SVProgressHUD showInfoWithStatus:@"没有历史记录了"];
+            [_tableView.mj_header endRefreshing];
+            return;
         }
-    });
-
+        
+        dispatch_suspend(_gcd_timer);
+        
+        
+        
+        //先找到数组中最旧的元素 的索引
+        LBChatDetailCellModel *model = _dataSource[0];
+        NSInteger targetIndex = model.indexInAllMsgs;
+        
+        __block NSMutableArray *resultArray = [NSMutableArray array];
+        
+        //去本地历史中加载
+        [self loadHistoryWithIndex:targetIndex array:&resultArray];
+        
+        if(resultArray.count){
+            NSInteger k = [resultArray.lastObject[@"indexrow"] integerValue];
+            NSInteger m = [resultArray.firstObject[@"indexrow"] integerValue];
+            if((k - m) == 20){ //找到20条数据 就加入到数组中
+                [self ecodeServerDataWithArray:resultArray beginIndex:-1 encodeType:EncodeTypeLocal];
+                
+                
+                _didLoadHistoryMsgs += resultArray.count;
+                [self.tableView.mj_header endRefreshing];
+                dispatch_resume(_gcd_timer); //重启定时器
+            }else{
+                [resultArray removeAllObjects];
+                _page_now ++;
+                dispatch_async(_request_last_msg_queue, ^{
+                    [self requestMsgsArray:&resultArray page:_page_now offset:20];
+                    
+                    //回主线程处理 更新UI
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if(resultArray.count){
+                            [self ecodeServerDataWithArray:resultArray beginIndex:targetIndex encodeType:EncodeTypeServer];
+                            
+                            [self.tableView reloadData];
+                            
+                            //将20条数据存储到数据库中   //[self findLastNewMsgInHistoryDBIndexWithModel:_dataSource[0]];
+                            [self saveMsgs:_dataSource];
+                        }else{
+                            [SVProgressHUD showErrorWithStatus:@"没有请求到数据"];
+                        }
+                        
+                        _didLoadHistoryMsgs += resultArray.count;
+                        [self.tableView.mj_header endRefreshing];
+                        dispatch_resume(_gcd_timer); //重启定时器
+                    });
+                });
+            }
+            
+        }else{
+            [resultArray removeAllObjects];
+            _page_now ++;
+            dispatch_async(_request_last_msg_queue, ^{
+                [self requestMsgsArray:&resultArray page:_page_now offset:20];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(resultArray.count){
+                        //没从本地拿到
+                        [self ecodeServerDataWithArray:resultArray beginIndex:targetIndex encodeType:EncodeTypeServer];
+                        
+                        [self.tableView reloadData];
+                        
+                        //将20条数据存储到数据库中   //[self findLastNewMsgInHistoryDBIndexWithModel:_dataSource[0]];
+                        [self saveMsgs:_dataSource];
+                    }else{
+                        [SVProgressHUD showErrorWithStatus:@"没有请求到数据"];
+                    }
+                    
+                    _didLoadHistoryMsgs += resultArray.count;
+                    [self.tableView.mj_header endRefreshing];
+                    dispatch_resume(_gcd_timer); //重启定时器
+                });
+            });
+        }
+    }
 }
+
+
+#pragma mark ---  去本地拿历史数据
+- (void)loadHistoryWithIndex:(NSInteger)targetIndex array:(NSMutableArray **)resultArray{
+    NSString *sql = [NSString stringWithFormat:@"select * from t_history_chat_123456 where indexrow between %zd and %zd order by indexrow desc",targetIndex - 1, targetIndex - 20];
+    sqlite3_stmt *stmt;
+    int result = sqlite3_prepare_v2(_db_chat_local_history, sql.UTF8String, -1, &stmt, NULL);
+    if (result == SQLITE_OK) {
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            
+            const unsigned char *time  = sqlite3_column_text(stmt, 1);
+            const unsigned char *icon  = sqlite3_column_text(stmt, 0);
+            const unsigned char *ID    = sqlite3_column_text(stmt, 2);
+            const unsigned char *memID = sqlite3_column_text(stmt, 3);
+            const unsigned char *name  = sqlite3_column_text(stmt, 4);
+            const unsigned char *msg   = sqlite3_column_text(stmt, 5);
+            int index   = sqlite3_column_int(stmt, 6);
+            @autoreleasepool {
+                NSDictionary *dic = @{
+                                      @"createTime":[@"" initWithUTF8String:(const char*)time],
+                                      @"headImg":[@"" initWithUTF8String:(const char*)icon],
+                                      @"id":[@"" initWithUTF8String:(const char*)ID],
+                                      @"memberId":[@"" initWithUTF8String:(const char*)memID],
+                                      @"memberNickname":[@"" initWithUTF8String:(const char*)name],
+                                      @"msg":[@"" initWithUTF8String:(const char*)msg],
+                                      @"indexrow":@(index)
+                                      };
+                [*resultArray addObject:dic];
+            }
+        }
+    }
+}
+
+
+#pragma mark ---  解析数据
+- (void)ecodeServerDataWithArray:(NSArray *)array beginIndex:(NSInteger)beginIndex encodeType:(EncodeType)type{
+    @synchronized (self) {
+        for (NSInteger k = array.count -1; k>=0; k--) {
+            @autoreleasepool {
+                NSDictionary *dic = array[k];
+                LBChatDetailCellModel *model = [LBChatDetailCellModel modelWithDic:dic];
+                if(type == EncodeTypeServer){//服务器的 要算
+                    model.indexInAllMsgs = beginIndex - k; //是所有记录中的哪一条
+                }else{//本地的
+                    model.indexInAllMsgs = [dic[@"indexrow"] integerValue];
+                }
+               
+                [self.dataSource addObject:model];
+            }
+        }
+    }
+    
+}
+
+#pragma mark --- 模拟服务器请求数据
+- (void)requestMsgsArray:(NSMutableArray **)resultArray page:(NSInteger)page offset:(NSInteger)offset{
+    NSString *sql = [NSString stringWithFormat:@"select * from t_chat limit %zd,%zd",page * offset,offset];
+    
+    sqlite3_stmt *stmt;
+    int result = sqlite3_prepare_v2(_db_chat_server, sql.UTF8String, -1, &stmt, NULL);
+    
+    if(result == SQLITE_OK){
+        
+        //拿到服务器返回的总数
+        _allMsgs = [[_serverTotalsDic objectForKey:keyTotals] integerValue];
+        
+        if(_isfirstInChatPage){
+            _firstInpageRecordMsgs = _allMsgs;
+        }
+        
+        while(sqlite3_step(stmt) == SQLITE_ROW){
+            
+            const unsigned char *time  = sqlite3_column_text(stmt, 1);
+            const unsigned char *icon  = sqlite3_column_text(stmt, 2);
+            const unsigned char *ID    = sqlite3_column_text(stmt, 3);
+            const unsigned char *memID = sqlite3_column_text(stmt, 4);
+            const unsigned char *name  = sqlite3_column_text(stmt, 5);
+            const unsigned char *msg   = sqlite3_column_text(stmt, 6);
+            @autoreleasepool {
+                NSDictionary *dic = @{
+                                      @"createTime":[@"" initWithUTF8String:(const char*)time],
+                                      @"headImg":[@"" initWithUTF8String:(const char*)icon],
+                                      @"id":[@"" initWithUTF8String:(const char*)ID],
+                                      @"memberId":[@"" initWithUTF8String:(const char*)memID],
+                                      @"memberNickname":[@"" initWithUTF8String:(const char*)name],
+                                      @"msg":[@"" initWithUTF8String:(const char*)msg],
+                                      };
+                [*resultArray addObject:dic];
+            }
+        }
+        
+        
+    }else{
+        [SVProgressHUD showErrorWithStatus:@"服务器错误"];
+    }
+}
+
 
 
 
