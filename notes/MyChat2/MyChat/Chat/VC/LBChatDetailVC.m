@@ -61,6 +61,9 @@ NSString * const keyTotals = @"totals";
 
 /** table*/
 @property(nonatomic,weak) UITableView *tableView;
+
+/** 历史记录表的名字 */
+@property (nonatomic,copy) NSString *_t_name;
 @end
 
 @implementation LBChatDetailVC
@@ -71,6 +74,10 @@ NSString * const keyTotals = @"totals";
     sqlite3_close(_db_chat_local_history);
     dispatch_cancel(_gcd_timer);
     _gcd_timer = nil;
+    
+    [[NSUserDefaults standardUserDefaults] setObject:@(_allMsgs) forKey:self._t_name];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
     self.navigationController.toolbarHidden = YES;
 }
 
@@ -110,6 +117,8 @@ NSString * const keyTotals = @"totals";
 
 #pragma mark *************** 初始化一些成员变量
 - (void)initData{
+    self._t_name = @"t_history_chat_123456";
+    
     _serverTotalsDic = [NSMutableDictionary dictionary];
     //假设现在数据源存储的总量是 626 这里是模拟
     [_serverTotalsDic setValue:@"626" forKey:keyTotals];
@@ -138,7 +147,7 @@ NSString * const keyTotals = @"totals";
     result = sqlite3_open(sqlLocalHistoryPath.UTF8String, &_db_chat_local_history);
     if(result == SQLITE_OK){
         //建表
-        NSString *sql = [NSString stringWithFormat:@"CREATE TABLE if not exists t_history_chat_%zd(headImg TEXT, createTime TEXT NOT NULL, ID TEXT NOT NULL, memberID TEXT NOT NULL, memberNickName TEXT NOT NULL, msg TEXT NOT NULL, indexrow INTEGER PRIMARY KEY NOT NULL)",123456];
+        NSString *sql = [NSString stringWithFormat:@"CREATE TABLE if not exists %@(headImg TEXT, createTime TEXT NOT NULL, ID TEXT NOT NULL, memberID TEXT NOT NULL, memberNickName TEXT NOT NULL, msg TEXT NOT NULL, indexrow INTEGER PRIMARY KEY NOT NULL)",self._t_name];
         char *error;
         result = sqlite3_exec(_db_chat_local_history, sql.UTF8String, NULL, NULL, &error);
         if(result == SQLITE_OK){
@@ -178,7 +187,7 @@ NSString * const keyTotals = @"totals";
     //请求  这里是模拟
     
     dispatch_async(_request_last_msg_queue, ^{
-        NSString *sql = [NSString stringWithFormat:@"select * from t_chat limit %zd,%zd",0,20];
+        NSString *sql = [NSString stringWithFormat:@"select * from t_chat limit %zd,%zd",0,_offset];
         
         sqlite3_stmt *stmt;
         
@@ -241,7 +250,7 @@ NSString * const keyTotals = @"totals";
                                 插入到原来数据源的最后面
                         */
                     
-                    if(hasNewMsgs > 20)//断层 直接加到数据源的末尾 20条
+                    if(hasNewMsgs > _offset)//断层 直接加到数据源的末尾 20条
                         hasNewMsgs = resultArray.count;
                     
                     for (NSInteger k = hasNewMsgs - 1; k >= 0; k--) {
@@ -252,7 +261,7 @@ NSString * const keyTotals = @"totals";
                     }
                     
                     //保存到数据库中 不管有没有重叠或者间隔
-                    [self saveMsgs:[_dataSource subarrayWithRange:NSMakeRange(_dataSource.count - 20, 20)]];
+                    [self saveMsgs:[_dataSource subarrayWithRange:NSMakeRange(_dataSource.count - _offset, _offset)]];
                     
                     [self.tableView reloadData];
                 }else{
@@ -277,7 +286,7 @@ NSInteger _offset = 20;
     if(_isfirstInChatPage){ //主线程中
         dispatch_async(_request_last_msg_queue, ^{
             NSMutableArray *resultArray = [NSMutableArray array];
-            [self requestMsgsArray:&resultArray page:0 offset:20];
+            [self requestMsgsArray:&resultArray page:0 offset:_offset];
             
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -298,16 +307,32 @@ NSInteger _offset = 20;
                     [self saveMsgs:_dataSource];
                     
                     
-                    //开启定时器
-                    //dispatch_resume(_gcd_timer);
                 }else{
-                    [SVProgressHUD showInfoWithStatus:@"没有数据"];
+                    //这里贴出一张背景图 或者直接加载最近的历史记录
+                    NSInteger index = [HistoryMsgsMax(self._t_name) integerValue];
+                    NSMutableArray *resultArray = [NSMutableArray array];
+                    if(index){
+                        [self loadHistoryWithIndex:index array:&resultArray];
+                        if(resultArray.count){
+                            [self ecodeServerDataWithArray:resultArray beginIndex:index encodeType:EncodeTypeLocal];
+                            [self.tableView reloadData];
+                            
+                            //滚动到最后面去
+                            NSIndexPath *path = [NSIndexPath indexPathForRow:resultArray.count -1 inSection:0];
+                            [self.tableView scrollToRowAtIndexPath:path atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                        }
+                        
+                    }else{
+                        [SVProgressHUD showInfoWithStatus:@"没有数据"];
+                    }
                     
-                    //[self createGcdTimer];
+                    
+                    
                 }
                 
                 _isfirstInChatPage = NO;
                 _didLoadHistoryMsgs = resultArray.count;
+                dispatch_resume(_gcd_timer); //开启定时器
             });
             
         });
@@ -335,7 +360,7 @@ NSInteger _offset = 20;
         if(resultArray.count){
             NSInteger k = [resultArray.lastObject[@"indexrow"] integerValue];
             NSInteger m = [resultArray.firstObject[@"indexrow"] integerValue];
-            if((k - m) == 20){ //找到20条数据 就加入到数组中
+            if((k - m) == _offset){ //找到20条数据 就加入到数组中
                 [self ecodeServerDataWithArray:resultArray beginIndex:-1 encodeType:EncodeTypeLocal];
                 
                 
@@ -346,7 +371,7 @@ NSInteger _offset = 20;
                 [resultArray removeAllObjects];
                 _page_now ++;
                 dispatch_async(_request_last_msg_queue, ^{
-                    [self requestMsgsArray:&resultArray page:_page_now offset:20];
+                    [self requestMsgsArray:&resultArray page:_page_now offset:_offset];
                     
                     //回主线程处理 更新UI
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -355,7 +380,7 @@ NSInteger _offset = 20;
                             
                             [self.tableView reloadData];
                             
-                            //将20条数据存储到数据库中   //[self findLastNewMsgInHistoryDBIndexWithModel:_dataSource[0]];
+                            //将20条数据存储到数据库中
                             [self saveMsgs:_dataSource];
                         }else{
                             [SVProgressHUD showErrorWithStatus:@"没有请求到数据"];
@@ -372,7 +397,7 @@ NSInteger _offset = 20;
             [resultArray removeAllObjects];
             _page_now ++;
             dispatch_async(_request_last_msg_queue, ^{
-                [self requestMsgsArray:&resultArray page:_page_now offset:20];
+                [self requestMsgsArray:&resultArray page:_page_now offset:_offset];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(resultArray.count){
                         //没从本地拿到
@@ -398,7 +423,7 @@ NSInteger _offset = 20;
 
 #pragma mark ---  去本地拿历史数据
 - (void)loadHistoryWithIndex:(NSInteger)targetIndex array:(NSMutableArray **)resultArray{
-    NSString *sql = [NSString stringWithFormat:@"select * from t_history_chat_123456 where indexrow between %zd and %zd order by indexrow desc",targetIndex - 1, targetIndex - 20];
+    NSString *sql = [NSString stringWithFormat:@"select * from %@ where indexrow between %zd and %zd order by indexrow desc",self._t_name,targetIndex - 1, targetIndex - _offset];
     sqlite3_stmt *stmt;
     int result = sqlite3_prepare_v2(_db_chat_local_history, sql.UTF8String, -1, &stmt, NULL);
     if (result == SQLITE_OK) {
@@ -486,8 +511,6 @@ NSInteger _offset = 20;
         }
         
         
-    }else{
-        [SVProgressHUD showErrorWithStatus:@"服务器错误"];
     }
 }
 
@@ -503,7 +526,7 @@ NSInteger _offset = 20;
 /** 插入记录到数据库*/
 - (void)saveMsgs:(NSArray<LBChatDetailCellModel *> *)array{
     //insert OR IGNORE into fdsfa(dgh) values(4);
-    NSMutableString *sql = [@"insert OR IGNORE into t_history_chat_123456(headImg,createTime,id,memberID,memberNickName,msg,indexrow) values" mutableCopy];
+    NSMutableString *sql = [[NSString stringWithFormat:@"insert OR IGNORE into %@(headImg,createTime,id,memberID,memberNickName,msg,indexrow) values",self._t_name] mutableCopy];
     for (NSInteger k = 0; k < array.count; k++) {
         @autoreleasepool {
             LBChatDetailCellModel *model = array[k];

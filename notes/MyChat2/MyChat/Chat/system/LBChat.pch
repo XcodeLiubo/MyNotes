@@ -25,6 +25,8 @@
 #define UserName [[NSUserDefaults standardUserDefaults] objectForKey:UserNameKey]
 #define Objc_same(str1,str2) [str1 isEqualToString:str2]
 
+#define T_ID @"t_history_chat_123456"
+#define HistoryMsgsMax(T_ID) [[NSUserDefaults standardUserDefaults] objectForKey:T_ID]
 
 
 
